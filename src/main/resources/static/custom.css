@@ -1,0 +1,71 @@
+/* Global Attributes */
+
+/* Standardised font and margining across all pages */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+
+* {
+    margin: 0px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Navigation Bar */
+
+.navbar {
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 1px solid #83958C;
+    border-radius: 5px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: block;
+}
+
+.nav-logo {
+    position: absolute;
+    display: block;
+    margin: auto;
+    overflow: hidden;
+    left: 42%;
+}
+
+.login-btn {
+    right: 0%;
+    background: #B39836;
+    border-radius: 6px;
+    font-weight: bold;
+    border-color: transparent;
+    color: #FFFFFF;
+    padding: 2px 15px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+.li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color:#B39836;
+    text-align: center;
+    padding: 19px 16px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+li a:hover {
+    color:#5e4b05;
+}
+
+.li-right {
+    float: right;
+    margin-top: 10px;
+
+}

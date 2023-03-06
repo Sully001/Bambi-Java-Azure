@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Inventory Management System</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/custom.css}">
+  <script type="text/javascript" th:href="@{/custom.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="navbar">
+  <ul>
+    <div class="nav-logo" id="nav-logo">
+      <img src="/images/Bambi-Shoes-Logo-Text-only-1.png" alt="Bambi-Logo" style="width:15vw; height:9vh;">
+    </div>
+    <li><a class="active li" href="">Reports</a></li>
+    <li><a class="li" href="">Orders</a></li>
+    <li><a class="li" href=""></a></li>
+    <li><a class="li" href=""></a></li>
+
+    <li><button type="submit" class="login-btn li-right"><a class="login-btn" href="">Administration</a></button></li>
+  </ul>
+
+</div>
+<div class="container">
+  <div class="row">
+  </div>
+  <!--search bar and search button -->
+  <form action="/" method="get">
+    <label><input type="text" name="keyword" class="form-control" placeholder="Search..."
+    th:value="${keyword}"></label>
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
+  <div class="row">
+    <div class="col-lg-3">
+      <a th:href="@{/products/new}" class="btn btn-secondary">Add Product</a>
+    </div>
+  </div>
+  <table class="table table-striped table-bordered">
+    <thead class="table-warning">
+    <tr>
+      <th>
+        Product Brand
+        <a th:href="@{'/products/' + ${currentPage} + '?sortField=productBrand&sortDir=' + ${reverseSortDir}}">
+          &#8691
+        </a>
+      </th>
+      <th>
+        Product Name
+        <a th:href="@{'/products/' + ${currentPage} + '?sortField=productName&sortDir=' + ${reverseSortDir}}">
+          &#8691
+        </a>
+      </th>
+      <th>
+        Product Price
+        <a th:href="@{'/products/' + ${currentPage} + '?sortField=productPrice&sortDir=' + ${reverseSortDir}}">
+          &#8691
+        </a>
+      </th>
+      <th>
+        Product Gender
+        <a th:href="@{'/products/' + ${currentPage} + '?sortField=productGender&sortDir=' + ${reverseSortDir}}">
+          &#8691
+        </a>
+      </th>
+      <th>
+        Product Category
+        <a th:href="@{'/products/' + ${currentPage} + '?sortField=productCategory&sortDir=' + ${reverseSortDir}}">
+          &#8691
+        </a>
+      </th>
+      <!--<th>Product Description</th>-->
+      <th>Product Image</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="product: ${listProducts}">
+      <td th:text="${product.productBrand}"></td>
+      <td th:text="${product.productName}"></td>
+      <td th:text="${product.productPrice}"></td>
+      <td th:text="${product.productGender}"></td>
+      <td th:text="${product.productCategory}"></td>
+      <!-- <td th:text="${product.productDescription}"></td> -->
+      <td th:text="${product.productImage}"></td>
+      <td>
+        <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-secondary">
+          Update
+        </a>
+        <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-danger">
+          Delete
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:if = "${totalPages > 1}">
+    <div class="row col-sm-10 justify-content-between d-flex">
+      <div class="col-sm-2">
+        Total Rows: [[${totalItems}]]
+      </div>
+      <div>
+         <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${currentPage != i}" th:href="@{'/products/'+ ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&keyword=' + ${keyword}}">[[${i}]]</a>
+            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+          </span>
+      </div>
+      <div>
+        <a th:if="${currentPage < totalPages}" th:href="@{'/products/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword=' + ${keyword}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+      </div>
+      <div>
+        <a th:if="${currentPage > 1 }" th:href="@{'/products/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword=' + ${keyword}}">Previous</a>
+        <span th:unless="${currentPage > 1 }">Previous</span>
+      </div>
+      <!-- An option to have a LAST button not req for now
+      <div>
+      <a th:if="${currentPage < totalPages}" th:href="@{'/products/' + ${totalPages}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+      </div>-->
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
