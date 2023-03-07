@@ -2,6 +2,8 @@ package com.example.bambi.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -33,6 +35,11 @@ public class Product {
     @Column(name = "product_image")
     public String productImage;
 
+    @Transient
+    private String stockLevel;
+
+    @OneToMany(mappedBy = "product")
+    private List<Size> sizes;
 
     public Product(String productBrand, String productName, int productPrice,
                    String productGender, String productCategory,
@@ -124,4 +131,15 @@ public class Product {
         return "/bambi-photos/" +  productImage;
     }
 
+    public String getStockLevel() {
+        return stockLevel;
+    }
+
+    public void setStockLevel(String stockLevel) {
+        this.stockLevel = stockLevel;
+    }
+
+    public List<Size> getSizes() { return sizes; }
+
+    public void setSizes(List<Size> sizes) { this.sizes = sizes; }
 }
