@@ -1,7 +1,10 @@
 package com.example.bambi.controller;
 
 import com.example.bambi.entity.Product;
+import com.example.bambi.entity.Size;
 import com.example.bambi.service.ProductService;
+import com.example.bambi.service.SizeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,10 +28,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-
-    public ProductController(ProductService productService) {
+    @Autowired
+    private SizeService sizeService;
+    public ProductController(ProductService productService, SizeService sizeService) {
         super();
         this.productService = productService;
+        this.sizeService = sizeService;
     }
 
     //GET request if no search all listed products shown, if search then only matched products shown
@@ -45,9 +50,37 @@ public class ProductController {
                                 @RequestParam("sortField") String sortField,
                                 @RequestParam(value = "sortDir") String sortDir,
                                 Model model) {
+
+        //keyword will always have a value
+        if (keyword == null) {
+            keyword = "";
+        }
+
         int pageSize = 5;
         Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
         List<Product> listProducts = page.getContent();
+
+        //Iterate through each product and calculate its stock level
+        for(Product product : listProducts){
+
+            //Get list of sizes
+            List<Size> sizes = sizeService.getSizesByProductId(product.getId());
+
+            //Calculate the total stock
+            int totalStockLevel = 0;
+            for (Size size : sizes){
+                totalStockLevel += size.getProductStock();
+            }
+
+            //Calculation for stock level
+            if (totalStockLevel == 0) {
+                product.setStockLevel("Out of Stock");
+            } else if (totalStockLevel <= 5) {
+                product.setStockLevel("Low Stock");
+            } else {
+                product.setStockLevel("In Stock");
+            }
+        }
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
