@@ -75,8 +75,8 @@ public class ProductController {
             //Calculation for stock level
             if (totalStockLevel == 0) {
                 product.setStockLevel("Out of Stock");
-            } else if (totalStockLevel <= 5) {
-                product.setStockLevel("Low Stock");
+            } else if (totalStockLevel <= 13) {
+                product.setStockLevel("Low in Stock");
             } else {
                 product.setStockLevel("In Stock");
             }
