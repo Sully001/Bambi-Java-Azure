@@ -76,6 +76,7 @@
       </th>
       <!--<th>Product Description</th>-->
       <th>Product Image</th>
+      <th>Stock Level</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -89,6 +90,7 @@
       <td th:text="${product.productCategory}"></td>
       <!-- <td th:text="${product.productDescription}"></td> -->
       <td th:text="${product.productImage}"></td>
+      <td th:text="${product.stockLevel}"></td>
       <td>
         <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-secondary">
           Update
