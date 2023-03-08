@@ -13,10 +13,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>Product: <span th:text="${product.productName}"></span></h1>
-<p><span th:text="${product.productDescription}"></span></p>
-<p>Price: £<span th:text="${product.productPrice}"></span></p>
-<p>Category: <span th:text="${product.productCategory}"></span></p>
+    <!-- Display Product information -->
+    <h1>Product: <span th:text="${product.productName}"></span></h1>
+    <p><span th:text="${product.productDescription}"></span></p>
+    <p>Price: £<span th:text="${product.productPrice}"></span></p>
+    <p>Category: <span th:text="${product.productCategory}"></span></p>
 <table>
     <thead>
     <tr>
@@ -30,7 +31,6 @@
     <tr th:each="size : ${sizes}">
         <td th:text="${size.productSize}"></td>
         <td th:text="${size.productStock}"></td>
-        <!-- Add a form to input the stock level to be added -->
         <td>
             <form th:action="@{'/product/stock/' + ${size.sizeId}}" method="POST">
                 <input type="number" name="stockToAdd" min="0" max="1500" required>
