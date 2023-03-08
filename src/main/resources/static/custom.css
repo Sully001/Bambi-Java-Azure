@@ -1,71 +1,37 @@
-/* Global Attributes */
-
-/* Standardised font and margining across all pages */
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
-
-* {
-    margin: 0px;
-    font-family: 'Montserrat', sans-serif;
+/* Global Attribute*/
+.main {
+    margin-left: 200px; /* adjust to the width of the sidebar */
+    padding: 0px 10px;
+    /* add a border to the main content area to visually separate it from the sidebar */
+    border-left: 1px solid #ddd;
 }
+.flexbox {
+    display: flex;
 
-/* Navigation Bar */
-
-.navbar {
-    box-sizing: border-box;
-    background: #FFFFFF;
-    border: 1px solid #83958C;
-    border-radius: 5px;
-    padding-left: 50px;
-    padding-right: 50px;
-    display: block;
 }
-
-.nav-logo {
+.sidebar {
+    width: 10%;
+    background-color: #f1f1f1;
     position: absolute;
-    display: block;
-    margin: auto;
-    overflow: hidden;
-    left: 42%;
-}
+    height: 100%;
+    overflow-x: hidden;
+    padding-top: 20px;
 
-.login-btn {
-    right: 0%;
-    background: #B39836;
-    border-radius: 6px;
-    font-weight: bold;
-    border-color: transparent;
-    color: #FFFFFF;
-    padding: 2px 15px;
 }
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: white;
-}
-
-.li {
-    float: left;
-}
-
-li a {
-    display: block;
-    color:#B39836;
-    text-align: center;
-    padding: 19px 16px;
+/* style the links inside the sidebar */
+.sidebar a {
+    padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 20px;
+    color: #000000;
+    display: block;
 }
 
-li a:hover {
-    color:#5e4b05;
+/* add a hover effect to the links */
+.sidebar a:hover {
+    background-color: #555;
+    color: white;
 }
-
-.li-right {
-    float: right;
-    margin-top: 10px;
-
+.container {
+    width: 90%;
 }
