@@ -8,4 +8,7 @@ public interface SizeService {
 
     List<Size> getSizesByProductId(Long productId);
 
+    Size saveSize(Size size);
+
+    Size getSizeById(Long sizeId);
 }

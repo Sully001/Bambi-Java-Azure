@@ -71,7 +71,7 @@
       </th>
       <!--<th>Product Description</th>-->
       <th>Product Image</th>
-      <th>Stock Level</th>
+      <th>Total Stock Level</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -85,7 +85,12 @@
       <td th:text="${product.productCategory}"></td>
       <!-- <td th:text="${product.productDescription}"></td> -->
       <td th:text="${product.productImage}"></td>
-      <td th:text="${product.stockLevel}"></td>
+      <td >
+        <a th:href="@{/product/stock/{id}(id=${product.id})}" class="btn stock-btn th:class append="
+           th:classappend="${product.stockLevel == 'Out of Stock' ? 'btn-danger' : (product.stockLevel == 'Low in Stock' ? 'btn-warning' : 'btn-success')}">
+          <p th:text="${product.stockLevel}"></p></a>
+
+      </td>
       <td>
         <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-secondary">
           Update
