@@ -13,7 +13,6 @@ public class Product {
     @Column(name = "product_id")
     public Long id;
 
-
     @Column(name = "product_brand", nullable = false)
     public String productBrand;
 
@@ -38,7 +37,7 @@ public class Product {
     @Transient
     private String stockLevel;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Size> sizes;
 
     public Product(String productBrand, String productName, int productPrice,
