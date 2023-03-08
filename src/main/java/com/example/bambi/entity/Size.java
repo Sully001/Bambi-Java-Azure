@@ -9,7 +9,7 @@ public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "size_id")
-    public Long id;
+    public Long sizeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -21,20 +21,20 @@ public class Size {
     @Column(name = "product_stock")
     public int productStock;
 
-    public Long getId() {
-        return id;
+    public Long getSizeId() {
+        return sizeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long sizeId) {
+        this.sizeId = sizeId;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProduct(Product productId) {
+        this.product = productId;
     }
 
     public String getProductSize() {
