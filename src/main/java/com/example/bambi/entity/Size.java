@@ -21,6 +21,14 @@ public class Size {
     @Column(name = "product_stock")
     public int productStock;
 
+    public Size(Product product, String productSize, int productStock) {
+        this.product = product;
+        this.productSize = productSize;
+        this.productStock = productStock;
+    }
+    //No Args Constructor
+    public Size(){}
+
     public Long getSizeId() {
         return sizeId;
     }
