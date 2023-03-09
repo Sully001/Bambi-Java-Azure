@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -58,10 +59,14 @@ public class ProductController {
 
         int pageSize = 5;
         Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
-        List<Product> listProducts = page.getContent();
+
+        // Get all the products from the database
+        List<Product> allProducts = productService.getAllProducts();
+        // create a list to store products that are low in stock or out of stock
+        List<Product> lowStockProducts = new ArrayList<>();
 
         //Iterate through each product and calculate its stock level
-        for(Product product : listProducts){
+        for(Product product : allProducts){
 
             //Get list of sizes
             List<Size> sizes = sizeService.getSizesByProductId(product.getId());
@@ -75,12 +80,28 @@ public class ProductController {
             //Calculation for stock level
             if (totalStockLevel == 0) {
                 product.setStockLevel("Out of Stock");
+                // add product to lowStockProducts list
+                lowStockProducts.add(product);
             } else if (totalStockLevel <= 13) {
                 product.setStockLevel("Low in Stock");
+                // add product to lowStockProducts list
+                lowStockProducts.add(product);
             } else {
                 product.setStockLevel("In Stock");
             }
         }
+        // check if there are any low stock products and send an alert to the admin
+        if (!lowStockProducts.isEmpty()) {
+            String message = "The following products are low in stock or out of stock: ";
+            for (Product p : lowStockProducts) {
+                message += p.getProductName() + ", ";
+            }
+            // remove last comma and add a period
+            message = message.substring(0, message.length() - 2) + ".";
+            model.addAttribute("message", message);
+        }
+        // filter the products based on the current page
+        List<Product> listProducts = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -92,6 +113,7 @@ public class ProductController {
         model.addAttribute("keyword", keyword);
         return "products";
     }
+
     //GET request to retrieve Stock info with all sizes
     @GetMapping("/product/stock/{id}")
     public String viewStock(@PathVariable(value = "id") long id, Model model) {
