@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Inventory Management System</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/custom.css}">
+  <script type="text/javascript" th:href="@{/custom.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<body>
+<h1>Orders</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Order ID</th>
+    <th>Customer First Name</th>
+    <th>Customer Last Name</th>
+    <th>Order Total</th>
+    <th>Order Status</th>
+    <th>Created At</th>
+    <th>Update Status</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.id}"></td>
+    <td th:text="${order.firstName}"></td>
+    <td th:text="${order.lastName}"></td>
+    <td th:text="${order.orderTotal}"></td>
+    <td th:text="${order.orderCompletion}"></td>
+    <td th:text="${order.createdAt}"></td>
+    <td style="text-align: center">
+      <form th:action="@{/updateOrderStatus}" method="post">
+        <input type="hidden" name="orderId" th:value="${order.id}" />
+        <select name="orderStatus">
+          <option value="PENDING">PENDING</option>
+          <option value="IN PROGRESS">IN PROGRESS</option>
+          <option value="COMPLETE">COMPLETE</option>
+          <option value="CANCELLED">CANCELLED</option>
+        </select>
+        <button type="submit">Update Status</button>
+      </form>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</body>
+</html>
