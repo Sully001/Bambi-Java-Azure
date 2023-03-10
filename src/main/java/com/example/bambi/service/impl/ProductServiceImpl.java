@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
@@ -55,5 +57,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> findByKeyword(String keyword, Pageable pageable) {  return productRepository.findByKeyword(keyword, pageable);
     }
+
+    @Override
+    public List<Product> getAllProducts() { return productRepository.findAll(); }
 
 }

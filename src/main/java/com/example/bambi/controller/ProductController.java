@@ -1,7 +1,10 @@
 package com.example.bambi.controller;
 
 import com.example.bambi.entity.Product;
+import com.example.bambi.entity.Size;
 import com.example.bambi.service.ProductService;
+import com.example.bambi.service.SizeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,10 +29,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-
-    public ProductController(ProductService productService) {
+    @Autowired
+    private SizeService sizeService;
+    public ProductController(ProductService productService, SizeService sizeService) {
         super();
         this.productService = productService;
+        this.sizeService = sizeService;
     }
 
     //GET request if no search all listed products shown, if search then only matched products shown
@@ -45,8 +51,55 @@ public class ProductController {
                                 @RequestParam("sortField") String sortField,
                                 @RequestParam(value = "sortDir") String sortDir,
                                 Model model) {
+
+        //keyword will always have a value
+        if (keyword == null) {
+            keyword = "";
+        }
+
         int pageSize = 5;
         Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
+        // Get all the products from the database
+        List<Product> allProducts = productService.getAllProducts();
+        // create a list to store products that are low in stock or out of stock
+        List<Product> lowStockProducts = new ArrayList<>();
+
+        //Iterate through each product and calculate its stock level
+        for(Product product : allProducts){
+
+            //Get list of sizes
+            List<Size> sizes = sizeService.getSizesByProductId(product.getId());
+
+            //Calculate the total stock
+            int totalStockLevel = 0;
+            for (Size size : sizes){
+                totalStockLevel += size.getProductStock();
+            }
+
+            //Calculation for stock level
+            if (totalStockLevel == 0) {
+                product.setStockLevel("Out of Stock");
+                // add product to lowStockProducts list
+                lowStockProducts.add(product);
+            } else if (totalStockLevel <= 13) {
+                product.setStockLevel("Low in Stock");
+                // add product to lowStockProducts list
+                lowStockProducts.add(product);
+            } else {
+                product.setStockLevel("In Stock");
+            }
+        }
+        // check if there are any low stock products and send an alert to the admin
+        if (!lowStockProducts.isEmpty()) {
+            String message = "The following products are low in stock or out of stock: ";
+            for (Product p : lowStockProducts) {
+                message += p.getProductName() + ", ";
+            }
+            // remove last comma and add a period
+            message = message.substring(0, message.length() - 2) + ".";
+            model.addAttribute("message", message);
+        }
+        // filter the products based on the current page
         List<Product> listProducts = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
@@ -59,7 +112,8 @@ public class ProductController {
         model.addAttribute("keyword", keyword);
         return "products";
     }
-    //GET request to retrieve the Add Product Form
+
+        //GET request to retrieve the Add Product Form
     @GetMapping("/products/new")
     public String addProductForm() {
         return "add_product";
