@@ -13,7 +13,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<body>
 <h1>Orders</h1>
 <table>
   <thead>
@@ -35,14 +34,14 @@
     <td th:text="${order.orderTotal}"></td>
     <td th:text="${order.orderCompletion}"></td>
     <td th:text="${order.createdAt}"></td>
-    <td style="text-align: center">
+    <td>
       <form th:action="@{/updateOrderStatus}" method="post">
         <input type="hidden" name="orderId" th:value="${order.id}" />
         <select name="orderStatus">
-          <option value="PENDING">PENDING</option>
-          <option value="IN PROGRESS">IN PROGRESS</option>
-          <option value="COMPLETE">COMPLETE</option>
-          <option value="CANCELLED">CANCELLED</option>
+          <option value="PENDING" th:selected="${order.orderCompletion == 'PENDING'}">PENDING</option>
+          <option value="IN PROGRESS" th:selected="${order.orderCompletion == 'IN PROGRESS'}">IN PROGRESS</option>
+          <option value="COMPLETE" th:selected="${order.orderCompletion == 'COMPLETE'}">COMPLETE</option>
+          <option value="CANCELLED" th:selected="${order.orderCompletion == 'CANCELLED'}">CANCELLED</option>
         </select>
         <button type="submit">Update Status</button>
       </form>
@@ -50,6 +49,5 @@
   </tbody>
 </table>
 
-</body>
 </body>
 </html>
