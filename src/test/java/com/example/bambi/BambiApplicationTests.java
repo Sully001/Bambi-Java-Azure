@@ -35,8 +35,7 @@ class BambiApplicationTests {
 
 
                             /*WHILST BUILDING NEW FUNCTIONS MUST IGNORE TESTS
-                                        WHEN FUNCTION BUILT
-                                        REBUILD TESTS TO SUIT*/
+                              WHEN FUNCTION BUILT REBUILD TESTS TO SUIT*/
 
 
     /*------Product.java Tests--------*/
