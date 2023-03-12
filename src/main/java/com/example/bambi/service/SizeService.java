@@ -11,4 +11,6 @@ public interface SizeService {
     Size saveSize(Size size);
 
     Size getSizeById(Long sizeId);
+
+    void deleteSizeById(Long sizeId);
 }

@@ -4,10 +4,12 @@ import com.example.bambi.entity.Product;
 import com.example.bambi.entity.Size;
 import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -115,34 +118,43 @@ public class ProductController {
 
         //GET request to retrieve the Add Product Form
     @GetMapping("/products/new")
-    public String addProductForm() {
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
         return "add_product";
     }
 
     //POST request to create a New Product entry
     @PostMapping("/products/new")
-    public String addProductForm(@RequestParam("product_brand") String brand,
-                                 @RequestParam("product_name") String name,
-                                 @RequestParam("product_price") int price,
-                                 @RequestParam("product_gender") String gender,
-                                 @RequestParam("product_category") String category,
-                                 @RequestParam("product_description") String description,
-                                 @RequestParam("product_image")MultipartFile image) throws IOException {
-        Product product = new Product();
-        product.setProductBrand(brand);
-        product.setProductName(name);
-        product.setProductPrice(price);
-        product.setProductGender(gender);
-        product.setProductCategory(category);
-        product.setProductDescription(description);
-
+    public String addProductForm(@Valid Product product,
+                                 BindingResult result,
+                                 @Valid @RequestParam(value = "product_image")MultipartFile image,
+                                 @RequestParam Map<String, String> allParams) throws IOException {
+        if (result.hasErrors()) {
+            return "add_product";
+        }
         String filename = image.getOriginalFilename();
         product.setProductImage(filename);
 
         productService.saveProduct(product);
+
+        //Create a list of all the names in HTML
+        String name = "size-";
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 4; i <= 13; i++) {
+            String names = name + i;
+            list.add(names);
+        }
+        //Loop to get all the values from input // Produces all Strings must convert to int
+        for (int i = 0; i < list.size(); i++) {
+            Size size = new Size();
+            size.setProduct(product);
+            size.setProductSize(Integer.toString(i+4));
+            size.setProductStock(Integer.parseInt(allParams.get(list.get(i))));
+            sizeService.saveSize(size);
+        }
+
         saveImageToFolder(image);
         return "redirect:/";
-
     }
 
     //GETs the existing product and produces the data in relevant form fields
@@ -154,23 +166,15 @@ public class ProductController {
 
     @PostMapping("/product/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @RequestParam String productBrand,
-                                @RequestParam String productName,
-                                @RequestParam int productPrice,
-                                @RequestParam String productGender,
-                                @RequestParam String productCategory,
-                                @RequestParam String productDescription,
-                                @RequestParam MultipartFile productImage) throws IOException {
+                                @Valid Product product,
+                                BindingResult result,
+                                @Valid @RequestParam(value = "product_image")MultipartFile productImage) throws IOException {
+        if (result.hasErrors()) {
+            return "edit_product";
+        }
 
         //Get existing product record
-        Product product = productService.getProductById(id);
-        product.setId(id);
-        product.setProductBrand(productBrand);
-        product.setProductName(productName);
-        product.setProductPrice(productPrice);
-        product.setProductGender(productGender);
-        product.setProductCategory(productCategory);
-        product.setProductDescription(productDescription);
+        productService.saveProduct(product);
 
         //If a file has been uploaded delete the old image
         if (productImage.getOriginalFilename() != "") {
@@ -190,6 +194,13 @@ public class ProductController {
     @GetMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         Product product = productService.getProductById(id);
+        //Get all sizes related to that shoe
+        List<Size> sizes = sizeService.getSizesByProductId(product.getId());
+
+        //Delete each size (each row)
+        for (Size size: sizes) {
+            sizeService.deleteSizeById(size.getSizeId());
+        }
         deleteImage(product.getProductImage());
         productService.deleteProductById(id);
         return "redirect:/";

@@ -38,5 +38,10 @@ public class SizeServiceImpl implements SizeService {
         }
     }
 
+    @Override
+    public void deleteSizeById(Long sizeId) {
+        sizeRepository.deleteById(sizeId);
+    }
+
 
 }
