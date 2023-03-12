@@ -1,0 +1,25 @@
+body {
+    background-color: #efe4c8;
+}
+
+#container {
+    padding: 50px;
+}
+.btn-primary {
+    background-color: #FFECA6 !important;
+}
+
+#form-container {
+    background-color: #ffffff;
+    border-radius: 4px;
+}
+
+.submit {
+    color: black;
+    margin: 0;
+}
+
+label {
+    font-weight: bold;
+    font-size: large;
+}
