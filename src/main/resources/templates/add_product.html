@@ -1,86 +1,139 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Inventory Management System</title>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-  <link rel="stylesheet" th:href="@{/custom.css}">
-  <script type="text/javascript" th:href="@{/custom.js}"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/addproduct.css}">
+  <script th:src="@{/addproduct.js}" defer></script>
+  <title>Document</title>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-        <h1 class="text-center">Add New Product</h1>
-        <div class="card-body">
-          <form th:action="@{/products/new}" enctype="multipart/form-data" method="POST">
+<form class="container" th:object="${product}" enctype="multipart/form-data" method="POST">
+  <div id="form1">
 
-            <div class="form-group">
-              <label>Product Brand:</label>
-              <label>
-                <input type="text" name="product_brand" placeholder="Enter Brand Name">
-              </label>
-            </div>
-
-            <div class="form-group">
-              <label>Product Name:</label>
-              <label>
-                <input type="text" name="product_name" placeholder="Enter Product Name">
-              </label>
-            </div>
-
-            <div class="form-group">
-              <label>Product Price:</label>
-              <label>
-                <input type="number" name="product_price" placeholder="Enter Product Price">
-              </label>
-            </div>
-
-            <div class="form-group">
-              <label>Product Gender:</label>
-              <select name="product_gender" id="product_gender">
-                <option value="Women">Women</option>
-                <option value="Men">Men</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="product_category">Product Category:</label>
-              <select name="product_category" id="product_category">
-                <option value="Trainers">Trainers</option>
-                <option value="Loafers">Loafers</option>
-                <option value="Boots">Boots</option>
-                <option value="Heels">Heels</option>
-                <option value="Dress Shoes">Dress Shoes</option>
-                <option value="Heeled Sandals">Heeled Sandals</option>
-                <option value="Brogues">Brogues</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Product Description:</label>
-              <textarea id="product_description" name="product_description" rows="4" cols="50"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Product Image:</label>
-              <input type="file" name="product_image" placeholder="Enter Product Image">
-            </div>
-
-            <div class="box-footer">
-              <button type="submit" class="btn btn-primary">
-                Submit
-              </button>
-            </div>
-
-          </form>
-        </div>
-      </div>
+    <div class="group">
+      <label>Product Brand</label>
+      <input type="text" th:field="*{productBrand}" name="product_brand" placeholder="Enter Brand Name">
+      <p class="error" th:if="${#fields.hasErrors('productBrand')}" th:errors="*{productBrand}"></p>
     </div>
+
+    <div class="group">
+      <label>Product Name</label>
+      <input type="text" th:field="*{productName}" name="product_name" placeholder="Enter Product Name">
+      <p class="error" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></p>
+    </div>
+
+    <div class="group">
+      <label>Product Price</label>
+      <input type="number" th:field="*{productPrice}" name="product_price" placeholder="Enter Product Price">
+      <p class="error" th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}"></p>
+    </div>
+
+    <div class="group">
+      <label>Product Gender:</label>
+      <select name="product_category" id="product_gender" th:field="*{productGender}">
+        <option value="" selected disabled>Select a Gender</option>
+        <option value="Women">Women</option>
+        <option value="Men">Men</option>
+      </select>
+      <p class="error" th:if="${#fields.hasErrors('productGender')}" th:errors="*{productGender}"></p>
+    </div>
+
+
+    <div class="group">
+      <label>Product Category:</label>
+      <select name="product_category" id="product_category" th:field="*{productCategory}">
+        <option value="Trainers">Trainers</option>
+        <option value="Loafers">Loafers</option>
+        <option value="Boots">Boots</option>
+        <option value="Heels">Heels</option>
+        <option value="Dress Shoes">Dress Shoes</option>
+        <option value="Heeled Sandals">Heeled Sandals</option>
+        <option value="Brogues">Brogues</option>
+      </select>
+      <p class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></p>
+    </div>
+
+    <div class="group">
+      <label>Product Description:</label><br>
+      <textarea th:field="*{productDescription}" id="product_description"
+                name="product_description" rows="4" cols="75"></textarea>
+      <p class="error" th:if="${#fields.hasErrors('productDescription')}" th:errors="*{productDescription}"></p>
+    </div>
+
+    <div class="group">
+      <label>Product Image:</label>
+      <input type="hidden" th:field="*{productImage}" id="filename" name="product_image" placeholder="Enter Product Image">
+      <input type="file" id="file" name="product_image" placeholder="Enter Product Image"
+             onchange="getName()">
+      <p class="error" th:if="${#fields.hasErrors('productImage')}" th:errors="*{productImage}"></p>
+    </div>
+
+    <section class="btn-box">
+      <button type="button" id="next1">Next</button>
+    </section>
   </div>
+  <div id="form2">
+    <div>
+      <h3>Set Stock Amount For Each Size, If Stock is blank it's set to 0!</h3><br>
+      <button type="button" onclick="remove()">Remove Values</button>
+      <button type="button" onclick="set100()">Set all To 100</button>
+      <button type="button" onclick="set200()">Set all To 200</button>
+    </div>
+
+    <div class="group">
+      <label>4</label>
+      <input type="number" value="" name="size-4" class="size">
+    </div>
+    <div class="group">
+      <label>5</label>
+      <input type="number" value="" name="size-5" class="size">
+    </div>
+    <div class="group">
+      <label>6</label>
+      <input type="number" value="" name="size-6" class="size">
+    </div>
+    <div class="group">
+      <label>7</label>
+      <input type="number" value="" name="size-7" class="size">
+    </div>
+    <div class="group">
+      <label>8</label>
+      <input type="number" value="" name="size-8" class="size">
+    </div>
+    <div class="group">
+      <label>9</label>
+      <input type="number" value="" name="size-9" class="size">
+    </div>
+    <div class="group">
+      <label>10</label>
+      <input type="number" value="" name="size-10" class="size">
+    </div>
+    <div class="group">
+      <label>11</label>
+      <input type="number" value="" name="size-11" class="size">
+    </div>
+    <div class="group">
+      <label>12</label>
+      <input type="number" value="" name="size-12" class="size">
+    </div>
+    <div class="group">
+      <label>13</label>
+      <input type="number" value="" name="size-13" class="size">
+    </div>
+
+    <section class="btn-box">
+      <button type="button" id="back1">Back</button>
+      <button type="submit" id="submit">Submit</button>
+    </section>
+  </div>
+  </div>
+  <div class="step-row">
+    <div id="progress"></div>
+    <div class="step-col"><small>Product Details</small></div>
+    <div class="step-col"><small>Product Stock Per Size</small></div>
+  </div>
+</form>
 </body>
 </html>
