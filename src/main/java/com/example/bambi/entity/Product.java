@@ -1,6 +1,8 @@
 package com.example.bambi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -13,24 +15,31 @@ public class Product {
     @Column(name = "product_id")
     public Long id;
 
+    @NotBlank(message = "Provide a Brand Name!")
     @Column(name = "product_brand", nullable = false)
     public String productBrand;
 
+    @NotBlank(message = "Provide a Product Name!")
     @Column(name = "product_name", nullable = false)
     public String productName;
 
+    @Range(min = 1, max = 10000, message = "Provide a Valid Price! Between 1 - 10,000")
     @Column(name = "product_price")
     public int productPrice;
 
+    @NotBlank(message = "Provide a Gender!")
     @Column(name = "product_gender")
     public String productGender;
 
+    @NotBlank(message = "Provide a Category!")
     @Column(name = "product_category")
     public String productCategory;
 
+    @NotBlank(message = "Provide a Description!")
     @Column(name = "product_description")
     public String productDescription;
 
+    @NotBlank(message = "Provide an Image!")
     @Column(name = "product_image")
     public String productImage;
 
