@@ -1,7 +1,9 @@
 package com.example.bambi.controller;
 
+import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Product;
 import com.example.bambi.entity.Size;
+import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
 import jakarta.validation.Valid;
@@ -34,6 +36,10 @@ public class ProductController {
     private final ProductService productService;
     @Autowired
     private SizeService sizeService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     public ProductController(ProductService productService, SizeService sizeService) {
         super();
         this.productService = productService;
@@ -235,6 +241,29 @@ public class ProductController {
         if(image.exists()) {
             image.delete();
         }
+    }
+
+    @GetMapping("/data")
+    public String showProductsData(Model model) {
+        List<ProductFrequency> products = productRepository.findProductFrequency();
+        model.addAttribute("products", products);
+        model.addAttribute("name", "John");
+        Long[] id = new Long[3];
+        Long[] frequency = new Long[3];
+        String[] shoeNames = new String[3];
+        for (int i = 0; i < products.size(); i++) {
+            id[i] = products.get(i).getProduct_id();
+            frequency[i] = products.get(i).getFrequency();
+        }
+        for (int i = 0; i < id.length; i++) {
+            String productName = productService.getProductById(id[i]).getProductName();
+            shoeNames[i] = productName;
+        }
+        model.addAttribute("id", id);
+        model.addAttribute("frequency", frequency);
+        model.addAttribute("shoes", shoeNames);
+        return "products_data";
+
     }
 
 }
