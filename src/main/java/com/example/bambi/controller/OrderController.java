@@ -30,7 +30,6 @@ public class OrderController {
     public String updateOrderStatus(@RequestParam("orderId") Long orderId,
                                     @RequestParam("orderStatus") String orderStatus) {
         orderService.updateOrderStatus(orderId, orderStatus);
-        System.out.println("yes it worked");
         return "redirect:/orders";
     }
 }
