@@ -1,21 +1,12 @@
-/* Global Attribute*/
-.main {
-    margin-left: 200px; /* adjust to the width of the sidebar */
-    padding: 0px 10px;
-    /* add a border to the main content area to visually separate it from the sidebar */
-    border-left: 1px solid #ddd;
-}
 .flexbox {
     display: flex;
 
 }
 .sidebar {
-    width: 10%;
     background-color: #f1f1f1;
-    position: absolute;
+    position: static;
     height: 100%;
     overflow-x: hidden;
-    padding-top: 20px;
 
 }
 /* style the links inside the sidebar */
@@ -31,9 +22,6 @@
 .sidebar a:hover {
     background-color: #555;
     color: white;
-}
-.container {
-    width: 90%;
 }
 
 .btn p {

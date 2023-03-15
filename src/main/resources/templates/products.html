@@ -75,7 +75,7 @@
       </th>
       <!--<th>Product Description</th>-->
       <th>Product Image</th>
-      <th>Total Stock Level</th>
+      <th>  </th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -90,9 +90,8 @@
       <!-- <td th:text="${product.productDescription}"></td> -->
       <td th:text="${product.productImage}"></td>
       <td >
-        <a th:href="@{/product/stock/{id}(id=${product.id})}" class="btn stock-btn th:class append="
-           th:classappend="${product.stockLevel == 'Out of Stock' ? 'btn-danger' : (product.stockLevel == 'Low in Stock' ? 'btn-warning' : 'btn-success')}">
-          <p th:text="${product.stockLevel}"></p></a>
+        <p><a th:href="@{/product/stock/{id}(id=${product.id})}" class="btn stock-btn th:class append=">
+          Stock levels <span style='font-size:16px;'>&#8680;</span></a></p>
 
       </td>
       <td>
@@ -142,7 +141,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="inventory-alert-modal-label">Inventory Alert</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times</span>
         </button>
       </div>
       <div class="modal-body">

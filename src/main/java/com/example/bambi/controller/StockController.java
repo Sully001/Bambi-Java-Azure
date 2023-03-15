@@ -34,16 +34,10 @@ public class StockController {
         //Get list of sizes
         List<Size> sizes = sizeService.getSizesByProductId(product.getId());
 
-        //Calculate the total stock
-        int totalStockLevel = 0;
-        for (Size size : sizes){
-            totalStockLevel += size.getProductStock();
-        }
 
         //Add the stock details to the model
         model.addAttribute("product", product);
         model.addAttribute("sizes", sizes);
-        model.addAttribute("totalStockLevel", totalStockLevel);
 
         return "stock";
     }

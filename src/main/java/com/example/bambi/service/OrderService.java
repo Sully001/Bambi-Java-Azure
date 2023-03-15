@@ -8,4 +8,7 @@ public interface OrderService {
     List<Order> getAllOrders();
 
 
+    void updateOrderStatus(Long orderId, String orderStatus);
+
+
 }
