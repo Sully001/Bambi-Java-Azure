@@ -96,7 +96,16 @@ public class ProductController {
     public String addProductForm(@Valid Product product,
                                  BindingResult result,
                                  @Valid @RequestParam(value = "product_image")MultipartFile image,
-                                 @RequestParam Map<String, String> allParams) throws IOException {
+                                 @RequestParam(value = "size-4", defaultValue = "0") String size4,
+                                 @RequestParam(value = "size-5", defaultValue = "0") String size5,
+                                 @RequestParam(value = "size-6", defaultValue = "0") String size6,
+                                 @RequestParam(value = "size-7", defaultValue = "0") String size7,
+                                 @RequestParam(value = "size-8", defaultValue = "0") String size8,
+                                 @RequestParam(value = "size-9", defaultValue = "0") String size9,
+                                 @RequestParam(value = "size-10", defaultValue = "0") String size10,
+                                 @RequestParam(value = "size-11", defaultValue = "0") String size11,
+                                 @RequestParam(value = "size-12", defaultValue = "0") String size12,
+                                 @RequestParam(value = "size-13", defaultValue = "0") String size13) throws IOException {
         if (result.hasErrors()) {
             return "add_product";
         }
@@ -105,19 +114,14 @@ public class ProductController {
 
         productService.saveProduct(product);
 
-        //Create a list of all the names in HTML
-        String name = "size-";
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 4; i <= 13; i++) {
-            String names = name + i;
-            list.add(names);
-        }
+        String[] sizes = {size4, size5, size6, size7, size8, size9, size10, size11, size12, size13};
+
         //Loop to get all the values from input // Produces all Strings must convert to int
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 4; i <= 13; i++) {
             Size size = new Size();
             size.setProduct(product);
-            size.setProductSize(Integer.toString(i+4));
-            size.setProductStock(Integer.parseInt(allParams.get(list.get(i))));
+            size.setProductSize(String.valueOf(i));
+            size.setProductStock(Integer.valueOf(sizes[i-4]));
             sizeService.saveSize(size);
         }
 
@@ -227,5 +231,4 @@ public class ProductController {
         return "products_data";
 
     }
-
 }
