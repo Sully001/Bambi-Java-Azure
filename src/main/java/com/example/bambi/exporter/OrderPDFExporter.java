@@ -57,13 +57,20 @@ public class OrderPDFExporter {
     private void writeTableData(PdfPTable table) {
         DecimalFormat decimalFormat = new DecimalFormat();
         decimalFormat.setGroupingSize(3);
+
         for (Order order: listOrders) {
-            table.addCell(String.valueOf((order.getOrderId())));
-            table.addCell(order.getFirstName());
-            table.addCell(order.getLastName());
-            table.addCell(order.getOrderCompletion());
-            table.addCell(String.valueOf(order.getCreatedAt()));
-            table.addCell(decimalFormat.format(order.getOrderTotal()));
+            if (!order.getOrderCompletion().equals("COMPLETE") && !order.getOrderCompletion().equals("CANCELLED")) {
+                table.addCell(String.valueOf((order.getOrderId())));
+                table.addCell(order.getFirstName());
+                table.addCell(order.getLastName());
+                if (order.getOrderCompletion().equals("IN PROGRESS")) {
+                    table.addCell("Outgoing");
+                } else if (order.getOrderCompletion().equals("PENDING")) {
+                    table.addCell("Incoming");
+                }
+                table.addCell(String.valueOf(order.getCreatedAt()));
+                table.addCell(decimalFormat.format(order.getOrderTotal()));
+            }
         }
     }
 
