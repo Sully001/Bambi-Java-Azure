@@ -1,9 +1,12 @@
 package com.example.bambi.controller;
 
 import com.example.bambi.entity.Order;
+import com.example.bambi.entity.Size;
 import com.example.bambi.exporter.OrderPDFExporter;
+import com.example.bambi.exporter.StockPDFExporter;
 import com.example.bambi.service.OrderService;
 import com.example.bambi.service.ProductService;
+import com.example.bambi.service.SizeService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +26,11 @@ public class ReportController {
 
     private OrderService orderService;
     private ProductService productService;
-
-    public ReportController(OrderService orderService, ProductService productService) {
+    private SizeService sizeService;
+    public ReportController(OrderService orderService, ProductService productService, SizeService sizeService) {
         this.orderService = orderService;
         this.productService = productService;
+        this.sizeService = sizeService;
     }
 
     @GetMapping("/reports")
@@ -126,6 +130,24 @@ public class ReportController {
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=orders_prev_month" + currentDateTime + ".pdf";
         OrderPDFExporter exporter = new OrderPDFExporter(listOrders, dateTime, "Year");
+        exporter.export(response);
+    }
+
+    @GetMapping("/orders/export/stock-report")
+    public void stockExportToPDF(HttpServletResponse response) throws IOException {
+        LocalDate now = LocalDate.now();
+
+        //Get list of orders
+        List<Size> lowInStock = sizeService.getSizesLowInStock();
+        List<Size> outOfStock = sizeService.getSizesOutOfStock();
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=orders_prev_month" + currentDateTime + ".pdf";
+        StockPDFExporter exporter = new StockPDFExporter(lowInStock, outOfStock);
         exporter.export(response);
     }
 }

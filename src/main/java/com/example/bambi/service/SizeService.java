@@ -13,4 +13,8 @@ public interface SizeService {
     Size getSizeById(Long sizeId);
 
     void deleteSizeById(Long sizeId);
+
+    List<Size> getSizesLowInStock();
+
+    List<Size> getSizesOutOfStock();
 }

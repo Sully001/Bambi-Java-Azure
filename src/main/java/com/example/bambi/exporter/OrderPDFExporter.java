@@ -100,9 +100,6 @@ public class OrderPDFExporter {
         writeTableData(table);
         document.add(table);
 
-        PdfPTable table2 = new PdfPTable(2);
-        table2.setWidthPercentage(100);
-        table.setSpacingBefore(15);
         document.close();
     }
 
