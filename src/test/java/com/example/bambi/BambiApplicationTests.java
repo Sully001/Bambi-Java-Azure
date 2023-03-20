@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -220,6 +221,7 @@ class BambiApplicationTests {
         Mockito.verify(model).addAttribute("listProducts", productList);
     }
 
+
     //Test update a product with valid inputs
     @Test
     public void testUpdateProductWithValidInput() throws Exception {
@@ -232,11 +234,12 @@ class BambiApplicationTests {
         String productCategory = "Trainers";
         String productDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
         Product product = new Product();
-        MockMultipartFile productImage = new MockMultipartFile("productImage", "image.jpg", "image/jpeg", "Some Image".getBytes());
-        Mockito.when(productService.getProductById(id)).thenReturn(product);
-
+        MockMultipartFile productImage = new MockMultipartFile("product_image", "image.jpg", "image/jpeg", "Some Image".getBytes());
+       // Mockito.when(productService.getProductById(id)).thenReturn(product);
+        BindingResult bindingResult = Mockito.mock(BindingResult.class);
         // Act
-        String viewName = controller.updateProduct(id, productBrand, productName, productPrice, productGender, productCategory, productDescription, productImage);
+
+        String viewName = controller.updateProduct(id, product, bindingResult, productImage);
 
         // Assert
         assertEquals("redirect:/", viewName);
@@ -264,14 +267,13 @@ class BambiApplicationTests {
         Product product = new Product();
         MultipartFile productImage = Mockito.mock(MultipartFile.class);
         Mockito.when(productService.getProductById(id)).thenReturn(product);
-
+        BindingResult bindingResult = Mockito.mock(BindingResult.class);
         // Act & Assert
-        assertThrows(Exception.class, () -> controller.updateProduct(id, productBrand, productName, productPrice, productGender,
-                productCategory, productDescription, productImage));
+        assertThrows(Exception.class, () -> controller.updateProduct(id, product, bindingResult, productImage));
         Mockito.verify(productService, Mockito.times(0)).updateProduct(product);
     }
 
-    //Test deletes a sample product using deletingProductById(?)
+        //Test deletes a sample product using deletingProductById(?)
     @Test
     public void testDeleteProduct() {
         // Arrange

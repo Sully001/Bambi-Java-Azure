@@ -12,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -202,7 +199,7 @@ public class ProductController {
 
     @PostMapping("/product/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @Valid Product product,
+                                @ModelAttribute @Valid Product product,
                                 BindingResult result,
                                 @Valid @RequestParam(value = "product_image")MultipartFile productImage) throws IOException {
         if (result.hasErrors()) {
