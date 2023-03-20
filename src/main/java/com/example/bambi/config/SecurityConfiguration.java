@@ -50,7 +50,7 @@ public class SecurityConfiguration {
 
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            response.sendRedirect("/home");
+            response.sendRedirect("/");
         }
     }
 
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                     .requestMatchers("/register").authenticated()
                     .requestMatchers("/products").authenticated()
-                .requestMatchers("/").authenticated()
+                    .requestMatchers("/").authenticated()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
