@@ -60,6 +60,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                     .requestMatchers("/register").authenticated()
                     .requestMatchers("/products").authenticated()
+                .requestMatchers("/").authenticated()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
