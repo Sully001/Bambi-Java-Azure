@@ -269,7 +269,6 @@ public class ProductController {
             image.delete();
         }
     }
-
     @GetMapping("/data")
     public String showProductsData(Model model) {
         List<ProductFrequency> products = productRepository.findProductFrequency();
@@ -280,11 +279,9 @@ public class ProductController {
         String[] shoeNames = new String[3];
         for (int i = 0; i < products.size(); i++) {
             id[i] = products.get(i).getProduct_id();
-            frequency[i] = products.get(i).getFrequency();
-        }
-        for (int i = 0; i < id.length; i++) {
             String productName = productService.getProductById(id[i]).getProductName();
             shoeNames[i] = productName;
+            frequency[i] = products.get(i).getFrequency();
         }
         model.addAttribute("id", id);
         model.addAttribute("frequency", frequency);

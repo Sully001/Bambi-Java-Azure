@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <title>Reports</title>
 </head>
-<body>
-  <h1>This is a reports page</h1>
-  <a th:href="@{/orders/export}">Export to PDF All Orders</a>
-</body>
+    <body>
+        <h1>This is a reports page</h1>
+
+        <h2>Historical Reports For Past Week and Month</h2>
+        <a th:href="@{/orders/export/prev-week}">Export Weekly Orders To PDF</a><br>
+        <a th:href="@{/orders/export/prev-month}" target="_blank">Export Monthly Orders to PDF</a><br>
+
+        <h2>All Current Incoming and Outgoing Orders</h2>
+        <a th:href="@{/orders/export/total-year-orders}" target="_blank">Export All Current Year Orders to PDF</a><br>
+
+        <h2>Report For All Out of Stock and Low Stocked Items</h2>
+        <a th:href="@{/orders/export/stock-report}" target="_blank">Export All Current Items That Are Low / Out of Stock</a><br>
+    </body>
 </html>

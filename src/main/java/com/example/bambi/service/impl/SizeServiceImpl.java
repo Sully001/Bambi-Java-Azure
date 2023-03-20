@@ -43,5 +43,12 @@ public class SizeServiceImpl implements SizeService {
         sizeRepository.deleteById(sizeId);
     }
 
-
+    @Override
+    public List<Size> getSizesLowInStock() {
+        return sizeRepository.getSizesLowInStock();
+    }
+    @Override
+    public List<Size> getSizesOutOfStock() {
+        return sizeRepository.getSizesOutOfStock();
+    }
 }

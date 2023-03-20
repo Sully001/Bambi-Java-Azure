@@ -6,6 +6,7 @@ import com.example.bambi.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-
+    @Override
+    public List<Order> getPreviousOrdersByTimestamp(Timestamp startOfTime, Timestamp endOfTime) {
+        return orderRepository.getPreviousOrdersByTimestamp(startOfTime, endOfTime);
+    }
 
 }
