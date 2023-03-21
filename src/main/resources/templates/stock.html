@@ -56,37 +56,47 @@
         </ul>
     </div>
 </nav>
-<div class="flexbox">
+<div class="container my-4">
 
-    <div class="container">
-        <!-- Display Product information -->
-        <h2>Product: <span th:text="${product.productName}"></span></h2>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Size</th>
-                <th>Stock Level</th>
-                <th>Add Stock</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Iterate over the sizes and display them in a table row -->
-            <tr th:each="size : ${sizes}">
-                <td th:text="${size.productSize}"></td>
-                <td th:class="${size.productStock == 0 ? 'out-of-stock' : (size.productStock < 10 ? 'low-stock' : (size.productStock >= 10 ? 'in-stock' : ''))}">
-                    <span th:text="${size.productStock}"></span>
-                </td>
-                <td>
-                    <form th:action="@{'/product/stock/' + ${size.sizeId}}" method="POST">
-                        <input type="number" name="stockToAdd" min="0" max="1500" required>
-                        <button class="btn btn-secondary" type="submit">+</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Product: <span th:text="${product.productName}"></span></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Stock Level</th>
+                            <th>Add Stock</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-        </table>
+                        <tr th:each="size : ${sizes}">
+                            <td th:text="${size.productSize}"></td>
+                            <td th:class="${size.productStock == 0 ? 'out-of-stock' : (size.productStock < 10 ? 'low-stock' : (size.productStock >= 10 ? 'in-stock' : ''))}">
+                                <span th:text="${size.productStock}"></span>
+                            </td>
+                            <td>
+                                <form th:action="@{'/product/stock/' + ${size.sizeId}}" method="POST">
+                                    <input type="number" name="stockToAdd" min="0" max="1500" required>
+                                    <button class="btn btn-secondary" type="submit">+</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
 </html>
+
