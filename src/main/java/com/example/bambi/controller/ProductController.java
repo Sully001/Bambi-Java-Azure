@@ -12,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -69,6 +66,70 @@ public class ProductController {
         int pageSize = 5;
         Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
         // Get all the products from the database
+
+        // Get all the products from the database
+        List<Product> allProducts = productService.getAllProducts();
+// create a list to store products that are low in stock or out of stock
+        List<Product> lowStockProducts = new ArrayList<>();
+
+//Iterate through each product and calculate its stock level based on the stock level of each size
+        for(Product product : allProducts){
+
+            //Get list of sizes
+            List<Size> sizes = sizeService.getSizesByProductId(product.getId());
+
+            //Calculate the stock level for each size and update the total stock level of the product
+            int totalStockLevel = 0;
+            for (Size size : sizes){
+                int sizeStockLevel = size.getProductStock();
+                if (sizeStockLevel == 0) {
+                    // if any size is out of stock, set the product's stock level to "Out of Stock"
+                    product.setStockLevel("Out of Stock");
+                    // add product to lowStockProducts list
+                    lowStockProducts.add(product);
+                    break;
+                } else if (sizeStockLevel <= 13) {
+                    // if any size is low in stock, set the product's stock level to "Low in Stock"
+                    product.setStockLevel("Low in Stock");
+                    // add product to lowStockProducts list if not already added
+                    if (!lowStockProducts.contains(product)) {
+                        lowStockProducts.add(product);
+                    }
+                } else {
+                    // if all sizes are in stock, set the product's stock level to "In Stock"
+                    product.setStockLevel("In Stock");
+                }
+                // update the total stock level of the product
+                totalStockLevel += sizeStockLevel;
+            }
+            if (product.getStockLevel() == null) {
+                // if the product's stock level has not been set yet, set it based on the total stock level
+                if (totalStockLevel == 0) {
+                    product.setStockLevel("Out of Stock");
+                    // add product to lowStockProducts list
+                    lowStockProducts.add(product);
+                } else if (totalStockLevel <= 13) {
+                    product.setStockLevel("Low in Stock");
+                    // add product to lowStockProducts list if not already added
+                    if (!lowStockProducts.contains(product)) {
+                        lowStockProducts.add(product);
+                    }
+                } else {
+                    product.setStockLevel("In Stock");
+                }
+            }
+        }
+
+// check if there are any low stock products and send an alert to the admin
+        if (!lowStockProducts.isEmpty()) {
+            String message = "There are sizes in following products are low in stock or out of stock: ";
+            for (Product p : lowStockProducts) {
+                message += p.getProductName() + ", ";
+            }
+            // remove last comma and add a period
+            message = message.substring(0, message.length() - 2) + ".";
+            model.addAttribute("message", message);
+        }
 
         // filter the products based on the current page
         List<Product> listProducts = page.getContent();
@@ -138,7 +199,7 @@ public class ProductController {
 
     @PostMapping("/product/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @Valid Product product,
+                                @ModelAttribute @Valid Product product,
                                 BindingResult result,
                                 @Valid @RequestParam(value = "product_image")MultipartFile productImage) throws IOException {
         if (result.hasErrors()) {
@@ -208,7 +269,6 @@ public class ProductController {
             image.delete();
         }
     }
-
     @GetMapping("/data")
     public String showProductsData(Model model) {
         List<ProductFrequency> products = productRepository.findProductFrequency();
@@ -219,11 +279,9 @@ public class ProductController {
         String[] shoeNames = new String[3];
         for (int i = 0; i < products.size(); i++) {
             id[i] = products.get(i).getProduct_id();
-            frequency[i] = products.get(i).getFrequency();
-        }
-        for (int i = 0; i < id.length; i++) {
             String productName = productService.getProductById(id[i]).getProductName();
             shoeNames[i] = productName;
+            frequency[i] = products.get(i).getFrequency();
         }
         model.addAttribute("id", id);
         model.addAttribute("frequency", frequency);
