@@ -1,5 +1,6 @@
 package com.example.bambi.service.impl;
 
+import com.example.bambi.entity.Order;
 import com.example.bambi.entity.OrderDetails;
 import com.example.bambi.repository.OrderDetailsRepository;
 import com.example.bambi.service.OrderDetailsService;
@@ -17,8 +18,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository) {
         this.orderDetailsRepository = orderDetailsRepository;
     }
-
-    public List<OrderDetails> getOrderDetailsByOrderId(Long orderId) {
+    @Override
+    public List<OrderDetails> getOrderDetailsByOrderId(Order orderId) {
         System.out.println("Getting order details for order ID " + orderId);
         List<OrderDetails> orderDetailsList = orderDetailsRepository.findByOrderId(orderId);
         System.out.println("Order details: " + orderDetailsList);

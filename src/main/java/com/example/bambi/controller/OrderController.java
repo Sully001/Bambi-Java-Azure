@@ -37,13 +37,15 @@ public class OrderController {
         orderService.updateOrderStatus(orderId, orderStatus);
         return "redirect:/orders";
     }
-    @GetMapping("/orders/{orderId}")
-    public String getOrderDetails(@PathVariable Long orderId, Model model) {
+    @GetMapping("/order_details/{orderId}")
+    public String getOrderDetails(@PathVariable Order orderId, Model model) {
         List<OrderDetails> orderDetailsList = orderDetailsService.getOrderDetailsByOrderId(orderId);
         model.addAttribute("orderId", orderId);
         model.addAttribute("orderDetailsList", orderDetailsList);
-        return "orders"+orderId;
+        return "order_details";
     }
+
+
 
 
 }
