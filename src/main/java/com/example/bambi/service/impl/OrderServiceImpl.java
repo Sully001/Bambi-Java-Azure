@@ -1,6 +1,7 @@
 package com.example.bambi.service.impl;
 
 import com.example.bambi.entity.Order;
+import com.example.bambi.entity.OrderDetails;
 import com.example.bambi.repository.OrderRepository;
 import com.example.bambi.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -34,5 +36,6 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getPreviousOrdersByTimestamp(Timestamp startOfTime, Timestamp endOfTime) {
         return orderRepository.getPreviousOrdersByTimestamp(startOfTime, endOfTime);
     }
+
 
 }

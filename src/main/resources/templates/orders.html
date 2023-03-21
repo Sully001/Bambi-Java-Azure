@@ -73,7 +73,7 @@
         </thead>
         <tbody>
         <tr th:each="order : ${orders}">
-          <td th:text="${order.id}"></td>
+          <td th:text="${order.orderId}"></td>
           <td th:text="${order.firstName}"></td>
           <td th:text="${order.lastName}"></td>
           <td th:text="${order.orderTotal}"></td>
@@ -82,7 +82,7 @@
           <td>
             <form th:action="@{/updateOrderStatus}" method="post" class="form-inline">
               <div class="form-group mr-2 max-width">
-                <input type="hidden" name="orderId"  th:value="${order.id}" />
+                <input type="hidden" name="orderId"  th:value="${order.orderId}" />
                 <select name="orderStatus" class="form-control">
                   <option value="PENDING" th:selected="${order.orderCompletion == 'PENDING'}">PENDING</option>
                   <option value="IN PROGRESS" th:selected="${order.orderCompletion == 'IN PROGRESS'}">IN PROGRESS</option>
@@ -94,7 +94,7 @@
             </form>
           </td>
           <td>
-            <a th:href="@{/order_details/{orderId}(orderId=${order.id})}" class=" btn btn-secondary" data-toggle="modal" data-target="#orderDetailsModal">Details</a>
+            <a th:href="@{/orders/{orderId}(orderId=${order.orderId})}" class="btn btn-secondary" data-target="#orderDetailsModal" data-toggle="modal">View Details</a>
           </td>
         </tr>
         </tbody>
@@ -115,7 +115,7 @@
 </footer>
 <!-- Modal -->
 <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg" >
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
@@ -124,11 +124,21 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>hi</p>
-      </div>
+      <table class="table table-striped table-bordered">
+        <tr th:each="orderDetail : ${orderDetailsList}">
+          <td th:text="${orderDetail.product.productImage}"></td>
+          <td th:text="${orderDetail.product.productName}"></td>
+          <td th:text="${orderDetail.product.productBrand}"></td>
+          <td th:text="${orderDetail.product.productPrice}"></td>
+          <td th:text="${orderDetail.product.productGender}"></td>
+          <td th:text="${orderDetail.product.productCategory}"></td>
+          <td th:text="${orderDetail.size}"></td>
+          <td th:text="${orderDetail.quantity}"></td>
+        </tr>
+      </table>
     </div>
   </div>
-
+  </div>
 </div>
 </body>
 </html>
