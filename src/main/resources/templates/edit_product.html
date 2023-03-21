@@ -4,70 +4,118 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Update Product</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/editproduct.css}">
-    <script type="text/javascript" th:href="@{/editproduct.js}"></script>
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery and Bootstrap JS CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Bambi Admin</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Overview</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/products">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/orders}">Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/reports}">Reports</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <form  th:action="@{/logout}" method="post">
+                    <button class="btn btn-primary" type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
     <div class="row justify-content-center my-3">
-        <div class="col-lg-10 col-md-8 " id="form-container">
-            <form th:action="@{/product/{id}(id=${product.id})}" th:object="${product}" method="POST" enctype="multipart/form-data">
+        <div class="col-lg-10 col-md-8">
+            <div class="card" id="form-container">
+                <div class="card-body">
+                    <form th:action="@{/product/{id}(id=${product.id})}" th:object="${product}" method="POST" enctype="multipart/form-data">
 
-                <label for="brand" class="form-label mt-2">Product Brand</label>
-                <input type="text" th:field="*{productBrand}" id="brand" name="product_brand" class="form-control">
-                <p class="error" th:if="${#fields.hasErrors('productBrand')}" th:errors="*{productBrand}"></p>
+                        <div class="form-group">
+                            <label for="brand">Product Brand</label>
+                            <input type="text" th:field="*{productBrand}" id="brand" name="product_brand" class="form-control">
+                            <p class="error" th:if="${#fields.hasErrors('productBrand')}" th:errors="*{productBrand}"></p>
+                        </div>
 
-                <label for="name" class="form-label mt-2">Product Name</label>
-                <input type="text" th:field="*{productName}" id="name" name="product_name" class="form-control">
-                <p class="error" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></p>
+                        <div class="form-group">
+                            <label for="name">Product Name</label>
+                            <input type="text" th:field="*{productName}" id="name" name="product_name" class="form-control">
+                            <p class="error" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Product Price (£)</label>
+                            <input type="number" th:field="*{productPrice}" id="price" name="product_price" placeholder="Product Price (£)" class="form-control">
+                            <p class="error" th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}"></p>
+                        </div>
 
-                <label for="price" th:field="*{productPrice}" class="form-label mt-2">Product Price (£)</label>
-                <input type="number" th:field="*{productPrice}" id="price" name="product_price" placeholder="Product Price (£)" class="form-control">
-                <p class="error" th:if="${#fields.hasErrors('productPrice')}" th:errors="*{productPrice}"></p>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select name="product_gender" id="gender" class="form-control" th:field="*{productGender}">
+                                <option value="" selected disabled>Select a Gender</option>
+                                <option value="Women">Women</option>
+                                <option value="Men">Men</option>
+                            </select>
+                            <p class="error" th:if="${#fields.hasErrors('productGender')}" th:errors="*{productGender}"></p>
+                        </div>
 
-                <label for="gender" class="form-label mt-2">Gender</label>
-                <select name="product_gender" id="gender" class="form-select" th:field="*{productGender}">
-                    <option value="" selected disabled>Select a Gender</option>
-                    <option value="Women">Women</option>
-                    <option value="Men">Men</option>
-                </select>
-                <p class="error" th:if="${#fields.hasErrors('productGender')}" th:errors="*{productGender}"></p>
+                        <div class="form-group">
+                            <label for="category">Product Category</label>
+                            <select name="product_category" id="category" class="form-control" th:field="*{productCategory}">
+                                <option value="" selected disabled>Select a Category</option>
+                                <option value="Trainers">Trainers</option>
+                                <option value="Loafers">Loafers</option>
+                                <option value="Boots">Boots</option>
+                                <option value="Heels">Heels</option>
+                                <option value="Dress Shoes">Dress Shoes</option>
+                                <option value="Heeled Sandals">Heeled Sandals</option>
+                                <option value="Brogues">Brogues</option>
+                            </select>
+                            <p class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></p>
+                        </div>
 
-                <label for="category" class="form-label mt-2">Product Category</label>
-                <select name="product_category" id="category" class="form-select" th:field="*{productCategory}">
-                    <option value="" selected disabled>Select a Category</option>
-                    <option value="Trainers">Trainers</option>
-                    <option value="Loafers">Loafers</option>
-                    <option value="Boots">Boots</option>
-                    <option value="Heels">Heels</option>
-                    <option value="Dress Shoes">Dress Shoes</option>
-                    <option value="Heeled Sandals">Heeled Sandals</option>
-                    <option value="Brogues">Brogues</option>
-                </select>
-                <p class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></p>
+                        <div class="form-group">
+                            <label for="description">Product Description</label>
+                            <textarea th:field="*{productDescription}" rows="4" cols="75" id="description" name="product_description" class="form-control"></textarea>
+                            <p class="error" th:if="${#fields.hasErrors('productDescription')}" th:errors="*{productDescription}"></p>
+                        </div>
 
-                <label for="description" th:field="*{productDescription}" class="form-label mt-2">Product Description</label>
-                <textarea th:field="*{productDescription}" rows="4" cols="75" id="description" name="product_description" class="form-control"></textarea>
-                <p class="error" th:if="${#fields.hasErrors('productDescription')}" th:errors="*{productDescription}"></p>
+                        <div class="form-group">
+                            <label for="file">Upload Product Image</label>
+                            <input type="hidden" th:field="*{productImage}" id="filename" name="product_image" placeholder="Enter Product Image">
+                            <input type="file" id="file" name="product_image" class="form-control" onchange="getName()">
+                            <p class="error" th:if="${#fields.hasErrors('productImage')}" th:errors="*{productImage}"></p>
+                        </div>
 
-                <label for="file" class="form-label mt-3">Upload Product Image</label>
-                <input type="hidden" th:field="*{productImage}" id="filename" name="product_image" placeholder="Enter Product Image">
-                <input type="file" id="file" name="product_image" class="form-control" onchange="getName()">
-                <p class="error" th:if="${#fields.hasErrors('productImage')}" th:errors="*{productImage}"></p>
+                        <p>This is the current image in the database</p>
+                        <p th:text="${product.productImage}"></p>
+                        <img th:src="@{${product.LogoImagePath}}" height="80px" width="80px">
 
-                <p>This is the current image in the database</p>
-                <p th:text="${product.productImage}"></p>
-                <img th:src="@{${product.LogoImagePath}}" height="80px" width="80px">
-
-                <div class="mb-4 mt-5 text-center">
-                    <button type="submit" class="btn btn-primary  border-0" id="submit"><p class="submit">Submit</p></button>
+                        <div class="mb-4 mt-5 text-center">
+                            <button type="submit" class="btn btn-primary  border-0" id="submit"><p class="submit">Submit</p></button>
+                        </div>
+                    </form>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
+</div>
 </body>
 </html>
