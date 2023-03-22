@@ -14,6 +14,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -221,9 +223,7 @@ class BambiApplicationTests {
         Mockito.verify(model).addAttribute("listProducts", productList);
     }
 
-
-    //Test update a product with valid inputs
-    /*@Test
+    @Test
     public void testUpdateProductWithValidInput() throws Exception {
         // Arrange
         Long id = 1L;
@@ -233,13 +233,20 @@ class BambiApplicationTests {
         String productGender = "Male";
         String productCategory = "Trainers";
         String productDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        MockMultipartFile productImage = new MockMultipartFile("product name", "image.jpg", "image/jpeg", "Some Image".getBytes());
         Product product = new Product();
-        MockMultipartFile productImage = new MockMultipartFile("product_image", "image.jpg", "image/jpeg", "Some Image".getBytes());
-       // Mockito.when(productService.getProductById(id)).thenReturn(product);
+        product.setProductBrand(productBrand);
+        product.setProductName(productName);
+        product.setProductPrice(productPrice);
+        product.setProductGender(productGender);
+        product.setProductCategory(productCategory);
+        product.setProductDescription(productDescription);
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+        Mockito.when(productService.getProductById(id)).thenReturn(product);
         BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        // Act
 
-        String viewName = controller.updateProduct(id, product, bindingResult, productImage);
+        // Act
+        String viewName = controller.updateProduct(id, product, bindingResult, productImage, redirectAttributes);
 
         // Assert
         assertEquals("redirect:/", viewName);
@@ -251,10 +258,10 @@ class BambiApplicationTests {
         assertEquals(productCategory, product.getProductCategory());
         assertEquals(productDescription, product.getProductDescription());
         assertEquals(productImage.getOriginalFilename(), product.getProductImage());
-    }*/
+    }
 
-    //Test with invalid input empty string for productName to test Exception is called
-   /* @Test
+    //Test with invalid input empty string for productName to test error message is returned
+    @Test
     public void testUpdateProductWithInvalidInputs() throws IOException {
         // Arrange
         Long id = 1L;
@@ -266,12 +273,19 @@ class BambiApplicationTests {
         String productDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
         Product product = new Product();
         MultipartFile productImage = Mockito.mock(MultipartFile.class);
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         Mockito.when(productService.getProductById(id)).thenReturn(product);
         BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        // Act & Assert
-        assertThrows(Exception.class, () -> controller.updateProduct(id, product, bindingResult, productImage));
+
+        // Act
+        String viewName = controller.updateProduct(id, product, bindingResult, productImage, redirectAttributes);
+
+        // Assert
+        assertEquals("redirect:/product/edit/" + id, viewName);
         Mockito.verify(productService, Mockito.times(0)).updateProduct(product);
-    }*/
+        assertEquals(1, redirectAttributes.getFlashAttributes().size());
+        assertTrue(redirectAttributes.getFlashAttributes().containsKey("error"));
+    }
 
         //Test deletes a sample product using deletingProductById(?)
     @Test

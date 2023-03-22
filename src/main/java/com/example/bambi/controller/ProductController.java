@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +25,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 @Controller
 public class ProductController {
@@ -197,31 +196,47 @@ public class ProductController {
         return "edit_product";
     }
 
-    @PostMapping("/product/{id}")
+    @PostMapping("/product/edit/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @ModelAttribute @Valid Product product,
+                                @Valid Product product,
                                 BindingResult result,
-                                @Valid @RequestParam(value = "product_image")MultipartFile productImage) throws IOException {
+                                @Valid @RequestParam(value = "product_image") MultipartFile productImage,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        // Check for validation errors
         if (result.hasErrors()) {
             return "edit_product";
         }
 
-        //Get existing product record
-        productService.saveProduct(product);
+        try {
+            // Get existing product record
+            productService.saveProduct(product);
 
-        //If a file has been uploaded delete the old image
-        if (productImage.getOriginalFilename() != "") {
-            deleteImage(product.getProductImage());
-            saveImageToFolder(productImage);
+            //If a file has been uploaded delete the old image
+            if (productImage.getOriginalFilename() != "") {
+                deleteImage(product.getProductImage());
+                saveImageToFolder(productImage);
 
-            //Set existing products new image
-            product.setProductImage(productImage.getOriginalFilename());
-        } else {
-            System.out.println("No File Available");
+                //Set existing products new image
+                product.setProductImage(productImage.getOriginalFilename());
+            } else {
+                System.out.println("No File Available");
+            }
+
+            // Update the product
+            productService.updateProduct(product);
+
+            // Redirect to the home page
+            return "redirect:/products";
+        } catch (IOException e) {
+            // Handle file I/O exceptions
+            redirectAttributes.addFlashAttribute("error", "An error occurred while processing the product image.");
+            return "redirect:/product/edit/" + id;
+        } catch (Exception e) {
+            // Handle all other exceptions
+            redirectAttributes.addFlashAttribute("error", "An error occurred while updating the product.");
+            return "redirect:/product/edit/" + id;
         }
-
-        productService.updateProduct(product);
-        return "redirect:/";
     }
 
     @GetMapping("/product/delete/{id}")

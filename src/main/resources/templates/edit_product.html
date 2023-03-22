@@ -46,7 +46,7 @@
         <div class="col-lg-10 col-md-8">
             <div class="card" id="form-container">
                 <div class="card-body">
-                    <form th:action="@{/product/{id}(id=${product.id})}" th:object="${product}" method="POST" enctype="multipart/form-data">
+                    <form th:action="@{/product/edit/{id}(id=${product.id})}" th:object="${product}" method="POST" enctype="multipart/form-data">
 
                         <div class="form-group">
                             <label for="brand">Product Brand</label>
@@ -105,12 +105,11 @@
 
                         <p>This is the current image in the database</p>
                         <p th:text="${product.productImage}"></p>
-                        <img th:src="@{${product.LogoImagePath}}" height="80px" width="80px">
+                        <img th:src="@{${product.logoImagePath}}" height="80px" width="80px">
 
                         <div class="mb-4 mt-5 text-center">
                             <button type="submit" class="btn btn-primary  border-0" id="submit"><p class="submit">Submit</p></button>
                         </div>
-                    </form>
                     </form>
                 </div>
             </div>
