@@ -54,24 +54,22 @@
           Customers
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Customer 1</li>
-          <li class="list-group-item">Customer 2</li>
-          <li class="list-group-item">Customer 3</li>
+          <li class="list-group-item" th:each="user : ${users}">
+            <div class="d-flex justify-content-between align-items-center">
+              <span th:text="${user.email}"></span>
+              <button class="btn btn-primary" type="button" data-toggle="collapse" th:data-target="'#user-' + ${user.id}">detail</button>
+            </div>
+            <div class="collapse" th:id="'user-' + ${user.id}">
+             <p> <strong>User Id: </strong> <span th:text="${user.id}"></span></p>
+              <p> <strong>First Name: </strong><span th:text="${user.first_name}"></span></p>
+              <p> <strong>Last Name: </strong><span th:text="${user.last_name}"></span></p>
+            </div>
+          </li>
         </ul>
+
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          Orders
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Order 1</li>
-          <li class="list-group-item">Order 2</li>
-          <li class="list-group-item">Order 3</li>
-        </ul>
-      </div>
-    </div>
+
     <div class="col-md-4">
       <div class="card">
         <div class="card-header">
