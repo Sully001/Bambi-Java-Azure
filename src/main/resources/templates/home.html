@@ -8,11 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" th:href="@{/products_data.css}">
-  <link crossorigin="anonymous"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        rel="stylesheet">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -87,53 +83,8 @@
         </div>
       </div>
     </div>
-    <div class="row mt-4">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Highest Sellers
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <div>
-              <canvas id="myChart"></canvas>
-            </div>
-            </li>
-          </ul>
-        </div>
-        </div>
-
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          Revenue
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <div>
-              <canvas id="revenueChart"></canvas>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-<script th:inline="javascript">
-  /*<![CDATA[*/
-  let idlist = /*[[${id}]]*/ "Test";
-  let freqlist = /*[[${frequency}]]*/ "Test";
-  let shoes = /*[[${shoes}]]*/ "Test";
-  let trailingSevenDays = /*[[${dates}]]*/ "Test";
-  let dailyRevenue = /*[[${dailyRevenue}]]*/ "Test";
-  /*]]>*/
-
-</script>
-<script th:src="@{/analytics.js}"></script>
-
+</div>
 <footer class="bg-light fixed-bottom">
   <div class="container">
     <div class="row">
