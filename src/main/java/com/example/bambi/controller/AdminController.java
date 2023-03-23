@@ -2,7 +2,11 @@ package com.example.bambi.controller;
 
 
 import com.example.bambi.entity.Admin;
+import com.example.bambi.entity.Order;
+import com.example.bambi.entity.Users;
 import com.example.bambi.repository.AdminRepository;
+import com.example.bambi.repository.OrderRepository;
+import com.example.bambi.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,9 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class AdminController {
-
+    @Autowired
+    private UsersRepository usersRepository;
     @Autowired
     private AdminRepository adminRepository;
 
@@ -38,7 +45,10 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    public String home() {
+    public String getAllUsers(Model model) {
+        List<Users> users = usersRepository.findAll();
+        System.out.println("Retrieved " + users.size() + " orders from the database");
+        model.addAttribute("users", users);
         return "home";
     }
 }
