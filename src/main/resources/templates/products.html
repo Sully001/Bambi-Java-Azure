@@ -116,7 +116,7 @@
             <td th:text="${product.productPrice}"></td>
             <td th:text="${product.productGender}"></td>
             <td th:text="${product.productCategory}"></td>
-            <td><img th:src="${product.productImage}" width="100" height="100"/></td>
+            <td><img th:src="${product.logoImagePath}" width="80px" height="80px"/></td>
             <td>
               <p><a th:href="@{/product/stock/{id}(id=${product.id})}" class="btn stock-btn th:class append=">Stock levels <span style='font-size:16px;'>&#8680;</span></a></p>
             </td>
