@@ -1,7 +1,4 @@
 package com.example.bambi.repository;
-
-import com.example.bambi.Projection.DailyOrderRevenue;
-import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Order;
 import com.example.bambi.entity.OrderDetails;
 import org.springframework.data.jpa.repository.JpaRepository;

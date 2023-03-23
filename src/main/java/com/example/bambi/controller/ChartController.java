@@ -1,9 +1,7 @@
 package com.example.bambi.controller;
 
-import com.example.bambi.Projection.DailyOrderRevenue;
 import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Order;
-import com.example.bambi.repository.OrderRepository;
 import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.OrderService;
 import com.example.bambi.service.ProductService;
@@ -13,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
