@@ -284,24 +284,23 @@ public class ProductController {
             image.delete();
         }
     }
-    @GetMapping("/data")
-    public String showProductsData(Model model) {
-        List<ProductFrequency> products = productRepository.findProductFrequency();
-        model.addAttribute("products", products);
-        model.addAttribute("name", "John");
-        Long[] id = new Long[3];
-        Long[] frequency = new Long[3];
-        String[] shoeNames = new String[3];
-        for (int i = 0; i < products.size(); i++) {
-            id[i] = products.get(i).getProduct_id();
-            String productName = productService.getProductById(id[i]).getProductName();
-            shoeNames[i] = productName;
-            frequency[i] = products.get(i).getFrequency();
-        }
-        model.addAttribute("id", id);
-        model.addAttribute("frequency", frequency);
-        model.addAttribute("shoes", shoeNames);
-        return "products_data";
-
-    }
+//    @GetMapping("/data")
+//    public String showProductsData(Model model) {
+//        List<ProductFrequency> products = productRepository.findProductFrequency();
+//        model.addAttribute("products", products);
+//        model.addAttribute("name", "John");
+//        Long[] id = new Long[3];
+//        Long[] frequency = new Long[3];
+//        String[] shoeNames = new String[3];
+//        for (int i = 0; i < products.size(); i++) {
+//            id[i] = products.get(i).getProduct_id();
+//            String productName = productService.getProductById(id[i]).getProductName();
+//            shoeNames[i] = productName;
+//            frequency[i] = products.get(i).getFrequency();
+//        }
+//        model.addAttribute("id", id);
+//        model.addAttribute("frequency", frequency);
+//        model.addAttribute("shoes", shoeNames);
+//        return "products_data";
+//    }
 }
