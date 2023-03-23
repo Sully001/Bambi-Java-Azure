@@ -2,14 +2,13 @@ package com.example.bambi;
 
 import com.example.bambi.controller.ProductController;
 import com.example.bambi.entity.Product;
+import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,16 +22,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
 
 @SpringBootTest
 class BambiApplicationTests {
 
 
-    ProductService productService = Mockito.mock(ProductService.class);
+    ProductService productService = mock(ProductService.class);
 
-    SizeService sizeService = Mockito.mock(SizeService.class);
+    ProductRepository productRepository = mock(ProductRepository.class);
 
-    Model model = Mockito.mock(Model.class);
+    SizeService sizeService = mock(SizeService.class);
+
+    Model model = mock(Model.class);
 
     ProductController controller = new ProductController(productService,sizeService);
 
@@ -40,7 +44,56 @@ class BambiApplicationTests {
                             /*WHILST BUILDING NEW FUNCTIONS MUST IGNORE TESTS
                               WHEN FUNCTION BUILT REBUILD TESTS TO SUIT*/
 
+    /*------ProductService.java Tests--------*/
+/*
+    @Test
+    public void testFindPaginatedWithKeyword() {
 
+        // Arrange
+        String keyword = "test"; int pageNo = 1; int pageSize = 10; String sortField = "name"; String sortDir = "ASC";
+
+        // Create some dummy products
+        List<Product> products = new ArrayList<>();
+        Product product1 = new Product(); product1.setProductName("Product 1");
+        products.add(product1);
+        Product product2 = new Product(); product2.setProductName("Product 2");
+        products.add(product2);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortField).ascending());
+        Page<Product> expectedPage = new PageImpl<>(products, pageable, products.size());
+
+        Mockito.when(productRepository.findByKeyword(keyword, pageable)).thenReturn(expectedPage);
+
+        // Act
+        Page<Product> actualPage = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
+
+        // Assert
+        assertEquals(expectedPage, actualPage);
+    }
+
+    @Test
+    public void testFindPaginatedWithoutKeyword() {
+
+        // Arrange
+        int pageNo = 1; int pageSize = 10; String sortField = "name"; String sortDir = "ASC";
+
+        // Create some dummy products
+        List<Product> products = new ArrayList<>();
+        Product product1 = new Product(); product1.setProductName("Product 1");
+        products.add(product1);
+        Product product2 = new Product(); product2.setProductName("Product 2");
+        products.add(product2);
+
+        // Act
+        Sort sort = Sort.by(sortField).ascending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<Product> expectedPage = Mockito.mock(Page.class);
+        Mockito.when(productRepository.findAll(pageable)).thenReturn(expectedPage);
+        Page<Product> actualPage = productService.findPaginated(null, pageNo, pageSize, sortField, sortDir);
+
+        // Assert
+        assertEquals(expectedPage, actualPage);
+    }
     /*------Product.java Tests--------*/
 
     @Test
@@ -205,6 +258,8 @@ class BambiApplicationTests {
         product.setProductDescription("This is test product description.");
         assertEquals("This is test product description.", product.getProductDescription());
     }
+
+
     /*------ProductController.java Tests--------*/
 
     //Test checks the method returns the correct view name and productService is called with the correct params.
@@ -216,8 +271,10 @@ class BambiApplicationTests {
         productList.add(new Product());
         PageImpl<Product> page = new PageImpl<>(productList, PageRequest.of(0, 1), 1);
         Mockito.when(productService.findPaginated(keyword, 1, 5, "productName", "asc")).thenReturn(page);
+
         // Act
         String viewName = controller.listAllProducts(keyword, model);
+
         // Assert
         assertEquals("products", viewName);
         Mockito.verify(model).addAttribute("listProducts", productList);
@@ -226,30 +283,26 @@ class BambiApplicationTests {
     @Test
     public void testUpdateProductWithValidInput() throws Exception {
         // Arrange
-        Long id = 1L;
-        String productBrand = "Nike";
-        String productName = "Air Max";
-        int productPrice = 100;
-        String productGender = "Male";
-        String productCategory = "Trainers";
+        Long id = 1L; String productBrand = "Nike"; String productName = "Air Max"; int productPrice = 100;
+        String productGender = "Male"; String productCategory = "Trainers";
         String productDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
         MockMultipartFile productImage = new MockMultipartFile("product name", "image.jpg", "image/jpeg", "Some Image".getBytes());
         Product product = new Product();
-        product.setProductBrand(productBrand);
-        product.setProductName(productName);
-        product.setProductPrice(productPrice);
-        product.setProductGender(productGender);
-        product.setProductCategory(productCategory);
-        product.setProductDescription(productDescription);
+
+        product.setProductBrand(productBrand); product.setProductName(productName);
+        product.setProductPrice(productPrice); product.setProductGender(productGender);
+        product.setProductCategory(productCategory); product.setProductDescription(productDescription);
+
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         Mockito.when(productService.getProductById(id)).thenReturn(product);
-        BindingResult bindingResult = Mockito.mock(BindingResult.class);
+        BindingResult bindingResult = mock(BindingResult.class);
 
         // Act
         String viewName = controller.updateProduct(id, product, bindingResult, productImage, redirectAttributes);
 
         // Assert
-        assertEquals("redirect:/", viewName);
+        assertEquals("redirect:/products", viewName);
         Mockito.verify(productService).updateProduct(product);
         assertEquals(productBrand, product.getProductBrand());
         assertEquals(productName, product.getProductName());
@@ -265,24 +318,18 @@ class BambiApplicationTests {
     public void testUpdateProductWithInvalidInputs() throws IOException {
         // Arrange
         Long id = 1L;
-        String productBrand = "";
-        String productName = "Product Name";
-        int productPrice = 0;
-        String productGender = "Male";
-        String productCategory = "Boots";
-        String productDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
         Product product = new Product();
-        MultipartFile productImage = Mockito.mock(MultipartFile.class);
+        MultipartFile productImage = mock(MultipartFile.class);
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         Mockito.when(productService.getProductById(id)).thenReturn(product);
-        BindingResult bindingResult = Mockito.mock(BindingResult.class);
+        BindingResult bindingResult = mock(BindingResult.class);
 
         // Act
         String viewName = controller.updateProduct(id, product, bindingResult, productImage, redirectAttributes);
 
         // Assert
         assertEquals("redirect:/product/edit/" + id, viewName);
-        Mockito.verify(productService, Mockito.times(0)).updateProduct(product);
+        Mockito.verify(productService, times(0)).updateProduct(product);
         assertEquals(1, redirectAttributes.getFlashAttributes().size());
         assertTrue(redirectAttributes.getFlashAttributes().containsKey("error"));
     }
@@ -300,7 +347,7 @@ class BambiApplicationTests {
         String viewName = controller.deleteProduct(id);
         // Assert
         assertEquals("redirect:/", viewName);
-        Mockito.verify(productService, Mockito.times(1)).deleteProductById(id);
+        Mockito.verify(productService, times(1)).deleteProductById(id);
     }
 
 
@@ -308,10 +355,8 @@ class BambiApplicationTests {
     @Test
     public void testFindPaginated() {
         // Arrange
-        String keyword = "test";
-        int pageNo = 1;
-        String sortField = "productName";
-        String sortDir = "asc";
+        String keyword = "test"; int pageNo = 1; String sortField = "productName"; String sortDir = "asc";
+
         Page<Product> page = new PageImpl<>(Arrays.asList(new Product(), new Product()));
         Mockito.when(productService.findPaginated(keyword, pageNo, 5, sortField, sortDir)).thenReturn(page);
 
@@ -333,10 +378,8 @@ class BambiApplicationTests {
     @Test
     void testKeywordNeverNull() {
         // Arrange
-        int pageNo = 1;
-        String sortField = "productName";
-        String sortDir = "asc";
-        String keyword = "";
+        int pageNo = 1; String sortField = "productName"; String sortDir = "asc"; String keyword = "";
+
         Page<Product> page = new PageImpl<>(Arrays.asList(new Product(), new Product()));
         Mockito.when(productService.findPaginated(keyword, pageNo, 5, sortField, sortDir)).thenReturn(page);
         // Act
