@@ -155,6 +155,7 @@ public class ProductController {
     @PostMapping("/products/new")
     public String addProductForm(@Valid Product product,
                                  BindingResult result,
+                                 RedirectAttributes redirAttrs,
                                  @Valid @RequestParam(value = "product_image")MultipartFile image,
                                  @RequestParam(value = "size-4", defaultValue = "0") String size4,
                                  @RequestParam(value = "size-5", defaultValue = "0") String size5,
@@ -186,7 +187,8 @@ public class ProductController {
         }
 
         saveImageToFolder(image);
-        return "redirect:/";
+        redirAttrs.addFlashAttribute("add", "Product Added Successfully");
+        return "redirect:/products";
     }
 
     //GETs the existing product and produces the data in relevant form fields
@@ -227,6 +229,7 @@ public class ProductController {
             productService.updateProduct(product);
 
             // Redirect to the home page
+            redirectAttributes.addFlashAttribute("update", "Product Updated Successfully");
             return "redirect:/products";
         } catch (IOException e) {
             // Handle file I/O exceptions
@@ -240,7 +243,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Product product = productService.getProductById(id);
         //Get all sizes related to that shoe
         List<Size> sizes = sizeService.getSizesByProductId(product.getId());
@@ -251,7 +254,8 @@ public class ProductController {
         }
         deleteImage(product.getProductImage());
         productService.deleteProductById(id);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("deleted", "Product Deleted Successfully");
+        return "redirect:/products";
     }
 
 
@@ -284,23 +288,4 @@ public class ProductController {
             image.delete();
         }
     }
-//    @GetMapping("/data")
-//    public String showProductsData(Model model) {
-//        List<ProductFrequency> products = productRepository.findProductFrequency();
-//        model.addAttribute("products", products);
-//        model.addAttribute("name", "John");
-//        Long[] id = new Long[3];
-//        Long[] frequency = new Long[3];
-//        String[] shoeNames = new String[3];
-//        for (int i = 0; i < products.size(); i++) {
-//            id[i] = products.get(i).getProduct_id();
-//            String productName = productService.getProductById(id[i]).getProductName();
-//            shoeNames[i] = productName;
-//            frequency[i] = products.get(i).getFrequency();
-//        }
-//        model.addAttribute("id", id);
-//        model.addAttribute("frequency", frequency);
-//        model.addAttribute("shoes", shoeNames);
-//        return "products_data";
-//    }
 }

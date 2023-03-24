@@ -46,7 +46,15 @@
     </ul>
   </div>
 </nav>
-
+<div th:if="${add}" class="alert alert-success" role="alert">
+  <p th:text="${add}"></p>
+</div>
+<div th:if="${update}" class="alert alert-success" role="alert">
+  <p th:text="${update}"></p>
+</div>
+<div th:if="${deleted}" class="alert alert-success" role="alert">
+  <p th:text="${deleted}"></p>
+</div>
 <div class="container mt-4">
   <h1 class="text-center mb-4">Product Inventory</h1>
   <div class="row">
