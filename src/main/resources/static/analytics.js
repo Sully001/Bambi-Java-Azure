@@ -6,17 +6,17 @@ new Chart(ctx, {
     data: {
         labels: ['Court Crystal Sneaker', 'Spike High Tops', 'Cloudbust Thunder Sneakers'],
         datasets: [{
-            label: '# of Pairs Sold',
+            label: 'Top 3 Best Selling Shoes',
             data: [28, 10 , 5],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0,7)',
-                'rgba(255, 286, 86, 0.7)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
             ],
             borderColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 286, 86, 0.7)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
             ],
             borderWidth: 1
         }]
@@ -36,10 +36,10 @@ const revenueChart = document.getElementById('revenueChart');
 Chart.defaults.color = '#000';
 
 new Chart(revenueChart, {
-    type: 'bar',
+    type: 'line',
     data: {
         datasets: [{
-            label: 'Revenue (£GBP)',
+            label: 'Trailing 7 Day Revenue (£GBP)',
             data: [
                 {x: trailingSevenDays[6], y: dailyRevenue[6]},
                 {x: trailingSevenDays[5], y: dailyRevenue[5]},
@@ -49,21 +49,12 @@ new Chart(revenueChart, {
                 {x: trailingSevenDays[1], y: dailyRevenue[1]},
                 {x: trailingSevenDays[0], y: dailyRevenue[0]},
             ],
+            fill: true,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.3)',
-                'rgba(54, 162, 235, 0,3)',
-                'rgba(255, 286, 86, 0.3)',
-                'rgba(255, 99, 132, 0.3)',
-                'rgba(54, 162, 235, 0,3)',
-                'rgba(255, 286, 86, 0.3)',
+                'rgba(75, 192, 192, 0.2)',
             ],
             borderColor: [
-                'rgba(255, 99, 132, 0.3)',
-                'rgba(54, 162, 235, 0.3)',
-                'rgba(255, 286, 86, 0.3)',
-                'rgba(255, 99, 132, 0.3)',
-                'rgba(54, 162, 235, 0.3)',
-                'rgba(255, 286, 86, 0.3)',
+                'rgba(75, 192, 192)',
             ],
             borderWidth: 1
         }]
