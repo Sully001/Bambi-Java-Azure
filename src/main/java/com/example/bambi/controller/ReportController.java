@@ -61,13 +61,14 @@ public class ReportController {
         LocalDate[] dates = new LocalDate[7];
         int[] dailyRevenue = new int[7];
 
+        //Todays start and end
         LocalDateTime startOfDay = now.atTime(0,0,0);
         LocalDateTime endOfDay = now.atTime(23, 59, 59);
 
         Timestamp startTime = Timestamp.valueOf(startOfDay);
         Timestamp endTime = Timestamp.valueOf(endOfDay);
+        //////////////////////
 
-        System.out.println("Hello");
 
         int addition = 0;
         LocalDate nowOrder = LocalDate.now();
@@ -92,6 +93,33 @@ public class ReportController {
             nowOrder = nowOrder.minusDays(1);
             addition = 0;
         }
+
+        //Get Revenue for past 30 Days
+        LocalDate today = LocalDate.now();
+        LocalDate[] month = new LocalDate[30];
+        int[] monthlyRevenue = new int[30];
+        int sum = 0;
+        for(int i = 0; i < 30; i++) {
+            month[i] = today;
+
+            LocalDateTime starting = today.atTime(0,0,0);
+            LocalDateTime ending = today.atTime(23, 59, 59);
+
+            Timestamp starts = Timestamp.valueOf(starting);
+            Timestamp ends = Timestamp.valueOf(ending);
+
+            List<Order> daysOrders = orderService.getPreviousOrdersByTimestamp(starts, ends);
+            for (int j = 0; j < daysOrders.size(); j++) {
+                sum += daysOrders.get(j).getOrderTotal().intValueExact();
+            }
+            monthlyRevenue[i] = sum;
+
+            System.out.println("Days: " + today + " Revenue " + sum);
+            //Reset sum and Minus Day
+            today = today.minusDays(1);
+            sum = 0;
+        }
+
 
 
 
