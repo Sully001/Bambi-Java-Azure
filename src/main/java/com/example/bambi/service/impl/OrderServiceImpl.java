@@ -37,5 +37,10 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getPreviousOrdersByTimestamp(startOfTime, endOfTime);
     }
 
+    @Override
+    public List<Order> searchOrders(String search) {
+        return orderRepository.findBySearch(search);
+    }
+
 
 }
