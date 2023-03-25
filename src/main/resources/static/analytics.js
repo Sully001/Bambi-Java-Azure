@@ -142,12 +142,13 @@ new Chart(monthlyChart, {
             data: monthlyDataset,
             fill: true,
             backgroundColor: [
-                'rgba(75, 192, 192, 0.2)',
+                'rgba(57, 61, 63, 0.2)',
             ],
             borderColor: [
-                'rgba(75, 192, 192)',
+                'rgba(57, 61, 63)',
             ],
-            borderWidth: 1
+            borderWidth: 1,
+            tension: 0.4,
         }]
     },
     options: {
@@ -209,10 +210,10 @@ new Chart(averageDailySpend, {
             ],
             fill: true,
             backgroundColor: [
-                'rgba(75, 192, 192, 0.2)',
+                'rgba(218, 86, 33, 0.2)',
             ],
             borderColor: [
-                'rgba(75, 192, 192)',
+                'rgba(218, 86, 33)',
             ],
             borderWidth: 1
         }]
