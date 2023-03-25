@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
@@ -60,6 +61,8 @@ public class ReportController {
         LocalDate now = LocalDate.now();
         LocalDate[] dates = new LocalDate[7];
         int[] dailyRevenue = new int[7];
+        String[] avgDailySpend = new String[7];
+        DecimalFormat df = new DecimalFormat("#.##");
 
         //Todays start and end
         LocalDateTime startOfDay = now.atTime(0,0,0);
@@ -68,7 +71,6 @@ public class ReportController {
         Timestamp startTime = Timestamp.valueOf(startOfDay);
         Timestamp endTime = Timestamp.valueOf(endOfDay);
         //////////////////////
-
 
         int addition = 0;
         LocalDate nowOrder = LocalDate.now();
@@ -88,6 +90,14 @@ public class ReportController {
                 addition += daysOrders.get(j).getOrderTotal().intValueExact();
             }
             dailyRevenue[i] = addition;
+            double spend = (double) addition / daysOrders.size();
+            if (Double.isNaN(spend)) {
+                avgDailySpend[i] = String.valueOf(0);
+            } else {
+                avgDailySpend[i] = df.format(spend);
+            }
+
+            System.out.println(avgDailySpend[i]);
 
             //Reset addition and Minus Day
             nowOrder = nowOrder.minusDays(1);
@@ -114,20 +124,18 @@ public class ReportController {
             }
             monthlyRevenue[i] = sum;
 
-            System.out.println("Days: " + today + " Revenue " + sum);
             //Reset sum and Minus Day
             today = today.minusDays(1);
             sum = 0;
         }
 
-
-
-
-        model.addAttribute("id", id);
         model.addAttribute("frequency", frequency);
         model.addAttribute("shoes", shoeNames);
         model.addAttribute("dates", dates);
         model.addAttribute("dailyRevenue", dailyRevenue);
+        model.addAttribute("avgDailySpend", avgDailySpend);
+        model.addAttribute("monthlyRevenue", monthlyRevenue);
+        model.addAttribute("month", month);
         return "reports";
     }
 
