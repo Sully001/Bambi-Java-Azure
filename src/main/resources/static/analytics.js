@@ -148,7 +148,6 @@ new Chart(monthlyChart, {
                 'rgba(57, 61, 63)',
             ],
             borderWidth: 1,
-            tension: 0.4,
         }]
     },
     options: {
