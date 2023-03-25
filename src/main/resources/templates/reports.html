@@ -54,10 +54,16 @@
     </div>
     <div class="row mt-5">
         <div class="col-md-6 p-4">
-            <canvas id="myChart"></canvas>
+            <canvas id="myChart" height="300px"></canvas>
         </div>
         <div class="col-md-6 p-4">
-            <canvas id="revenueChart"></canvas>
+            <canvas id="revenueChart" height="300px"></canvas>
+        </div>
+        <div class="col-md-6 p-4">
+            <canvas id="monthlyChart" height="300px"></canvas>
+        </div>
+        <div class="col-md-6 p-4">
+            <canvas id="avgDailySpend" height="300px"></canvas>
         </div>
     </div>
     <div class="row mt-5">
@@ -93,11 +99,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let idlist = /*[[${id}]]*/ "Test";
     let freqlist = /*[[${frequency}]]*/ "Test";
     let shoes = /*[[${shoes}]]*/ "Test";
     let trailingSevenDays = /*[[${dates}]]*/ "Test";
     let dailyRevenue = /*[[${dailyRevenue}]]*/ "Test";
+    let trailingThirtyDays = /*[[${month}]]*/ "Test";
+    let monthlyRevenue = /*[[${monthlyRevenue}]]*/ "Test";
+    let avgDailySpend = /*[[${avgDailySpend}]]*/ "Test";
     /*]]>*/
 
 </script>
