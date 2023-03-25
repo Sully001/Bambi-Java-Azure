@@ -25,9 +25,13 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String listOrders(Model model) {
+    public String showOrders(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
         List<Order> orders = orderService.getAllOrders();
+        if (keyword != null && !keyword.isEmpty()) {
+            orders = orderService.searchOrders(keyword);
+        }
         model.addAttribute("orders", orders);
+        model.addAttribute("keyword", keyword);
         return "orders";
     }
 

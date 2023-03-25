@@ -13,4 +13,5 @@ public interface OrderService {
 
     List<Order> getPreviousOrdersByTimestamp(Timestamp startOfTime, Timestamp endOfTime);
 
+    List<Order> searchOrders(String search);
 }
