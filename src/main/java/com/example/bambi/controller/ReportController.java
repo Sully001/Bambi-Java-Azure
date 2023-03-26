@@ -1,13 +1,16 @@
 package com.example.bambi.controller;
 
+import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Order;
 import com.example.bambi.entity.Size;
 import com.example.bambi.exporter.OrderPDFExporter;
 import com.example.bambi.exporter.StockPDFExporter;
+import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.OrderService;
 import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
@@ -27,31 +31,111 @@ public class ReportController {
     private OrderService orderService;
     private ProductService productService;
     private SizeService sizeService;
+    @Autowired
+    private ProductRepository productRepository;
+
     public ReportController(OrderService orderService, ProductService productService, SizeService sizeService) {
         this.orderService = orderService;
         this.productService = productService;
         this.sizeService = sizeService;
     }
-
     @GetMapping("/reports")
-    public String reports(Model model) {
+    public String showProductsData(Model model) {
+
+        //Get Top 3 Most Sold Items & Their Quantities Sold
+        List<ProductFrequency> products = productRepository.findProductFrequency();
+        model.addAttribute("products", products);
+        model.addAttribute("name", "John");
+        Long[] id = new Long[3];
+        Long[] frequency = new Long[3];
+        String[] shoeNames = new String[3];
+        for (int i = 0; i < products.size(); i++) {
+            id[i] = products.get(i).getProduct_id();
+            String productName = productService.getProductById(id[i]).getProductName();
+            shoeNames[i] = productName;
+            frequency[i] = products.get(i).getFrequency();
+        }
+
+
+        //Get Revenue for past seven days
         LocalDate now = LocalDate.now();
-        // Set the day of the month to the first day of the previous month
-        LocalDate firstDayOfPreviousMonth = now.minusMonths(1).withDayOfMonth(1);
-        // Set the day of the month to the last day of the previous month
-        LocalDate lastDayOfPreviousMonth = now.minusMonths(1).withDayOfMonth(now.minusMonths(1).lengthOfMonth());
+        LocalDate[] dates = new LocalDate[7];
+        int[] dailyRevenue = new int[7];
+        String[] avgDailySpend = new String[7];
+        DecimalFormat df = new DecimalFormat("#.##");
 
+        //Todays start and end
+        LocalDateTime startOfDay = now.atTime(0,0,0);
+        LocalDateTime endOfDay = now.atTime(23, 59, 59);
 
+        Timestamp startTime = Timestamp.valueOf(startOfDay);
+        Timestamp endTime = Timestamp.valueOf(endOfDay);
+        //////////////////////
 
+        int addition = 0;
+        LocalDate nowOrder = LocalDate.now();
 
-//        while(!weekStartDate.isEqual(weekEndDate)) {
-//            weekStartDate = weekStartDate.plusDays(1);
-//            System.out.println("Day: " + weekStartDate);
-//            System.out.println("The end of the week!");
-//        }
+        for(int i = 0; i < 7; i++) {
+            dates[i] = now;
+            now = now.minusDays(1);
 
-//        model.addAttribute("weekStartDate", monday);
-//        model.addAttribute("weekEndDate", sunday);
+            LocalDateTime starting = nowOrder.atTime(0,0,0);
+            LocalDateTime ending = nowOrder.atTime(23, 59, 59);
+
+            Timestamp starts = Timestamp.valueOf(starting);
+            Timestamp ends = Timestamp.valueOf(ending);
+
+            List<Order> daysOrders = orderService.getPreviousOrdersByTimestamp(starts, ends);
+            for (int j = 0; j < daysOrders.size(); j++) {
+                addition += daysOrders.get(j).getOrderTotal().intValueExact();
+            }
+            dailyRevenue[i] = addition;
+            double spend = (double) addition / daysOrders.size();
+            if (Double.isNaN(spend)) {
+                avgDailySpend[i] = String.valueOf(0);
+            } else {
+                avgDailySpend[i] = df.format(spend);
+            }
+
+            System.out.println(avgDailySpend[i]);
+
+            //Reset addition and Minus Day
+            nowOrder = nowOrder.minusDays(1);
+            addition = 0;
+        }
+
+        //Get Revenue for past 30 Days
+        LocalDate today = LocalDate.now();
+        LocalDate[] month = new LocalDate[30];
+        int[] monthlyRevenue = new int[30];
+        int sum = 0;
+        for(int i = 0; i < 30; i++) {
+            month[i] = today;
+
+            LocalDateTime starting = today.atTime(0,0,0);
+            LocalDateTime ending = today.atTime(23, 59, 59);
+
+            Timestamp starts = Timestamp.valueOf(starting);
+            Timestamp ends = Timestamp.valueOf(ending);
+
+            List<Order> daysOrders = orderService.getPreviousOrdersByTimestamp(starts, ends);
+            for (int j = 0; j < daysOrders.size(); j++) {
+                sum += daysOrders.get(j).getOrderTotal().intValueExact();
+            }
+            monthlyRevenue[i] = sum;
+
+            //Reset sum and Minus Day
+            today = today.minusDays(1);
+            sum = 0;
+        }
+
+        model.addAttribute("frequency", frequency);
+        model.addAttribute("shoes", shoeNames);
+        model.addAttribute("dates", dates);
+        model.addAttribute("dailyRevenue", dailyRevenue);
+        model.addAttribute("avgDailySpend", avgDailySpend);
+        model.addAttribute("monthlyRevenue", monthlyRevenue);
+        model.addAttribute("month", month);
         return "reports";
     }
 

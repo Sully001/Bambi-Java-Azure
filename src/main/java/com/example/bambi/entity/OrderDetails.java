@@ -8,21 +8,25 @@ public class OrderDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    private Order order;
+    public Order orderId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    public Product product;
 
     @Column(name = "product_size")
-    private String size;
+    public String size;
 
     @Column(name = "quantity")
-    private int quantity;
+    public int quantity;
+
+    public Long getId() { return id;}
+
+    public void setId(Long id) { this.id = id;}
 
     public String getSize() {
         return size;
@@ -32,21 +36,12 @@ public class OrderDetails {
         this.size = size;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Order getOrder() {
-        return order;
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(Order orderId) {
+        this.orderId = orderId;
     }
 
     public Product getProduct() {

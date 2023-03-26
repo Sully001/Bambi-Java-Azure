@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +25,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 @Controller
 public class ProductController {
@@ -156,6 +155,7 @@ public class ProductController {
     @PostMapping("/products/new")
     public String addProductForm(@Valid Product product,
                                  BindingResult result,
+                                 RedirectAttributes redirAttrs,
                                  @Valid @RequestParam(value = "product_image")MultipartFile image,
                                  @RequestParam(value = "size-4", defaultValue = "0") String size4,
                                  @RequestParam(value = "size-5", defaultValue = "0") String size5,
@@ -187,7 +187,8 @@ public class ProductController {
         }
 
         saveImageToFolder(image);
-        return "redirect:/";
+        redirAttrs.addFlashAttribute("add", "Product Added Successfully");
+        return "redirect:/products";
     }
 
     //GETs the existing product and produces the data in relevant form fields
@@ -197,35 +198,52 @@ public class ProductController {
         return "edit_product";
     }
 
-    @PostMapping("/product/{id}")
+    @PostMapping("/product/edit/{id}")
     public String updateProduct(@PathVariable Long id,
-                                @ModelAttribute @Valid Product product,
+                                @Valid Product product,
                                 BindingResult result,
-                                @Valid @RequestParam(value = "product_image")MultipartFile productImage) throws IOException {
+                                @Valid @RequestParam(value = "product_image") MultipartFile productImage,
+                                RedirectAttributes redirectAttributes) throws IOException {
+
+        // Check for validation errors
         if (result.hasErrors()) {
             return "edit_product";
         }
 
-        //Get existing product record
-        productService.saveProduct(product);
+        try {
+            // Get existing product record
+            productService.saveProduct(product);
 
-        //If a file has been uploaded delete the old image
-        if (productImage.getOriginalFilename() != "") {
-            deleteImage(product.getProductImage());
-            saveImageToFolder(productImage);
+            //If a file has been uploaded delete the old image
+            if (productImage.getOriginalFilename() != "") {
+                deleteImage(product.getProductImage());
+                saveImageToFolder(productImage);
 
-            //Set existing products new image
-            product.setProductImage(productImage.getOriginalFilename());
-        } else {
-            System.out.println("No File Available");
+                //Set existing products new image
+                product.setProductImage(productImage.getOriginalFilename());
+            } else {
+                System.out.println("No File Available");
+            }
+
+            // Update the product
+            productService.updateProduct(product);
+
+            // Redirect to the home page
+            redirectAttributes.addFlashAttribute("update", "Product Updated Successfully");
+            return "redirect:/products";
+        } catch (IOException e) {
+            // Handle file I/O exceptions
+            redirectAttributes.addFlashAttribute("error", "An error occurred while processing the product image.");
+            return "redirect:/product/edit/" + id;
+        } catch (Exception e) {
+            // Handle all other exceptions
+            redirectAttributes.addFlashAttribute("error", "An error occurred while updating the product.");
+            return "redirect:/product/edit/" + id;
         }
-
-        productService.updateProduct(product);
-        return "redirect:/";
     }
 
     @GetMapping("/product/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Product product = productService.getProductById(id);
         //Get all sizes related to that shoe
         List<Size> sizes = sizeService.getSizesByProductId(product.getId());
@@ -236,7 +254,8 @@ public class ProductController {
         }
         deleteImage(product.getProductImage());
         productService.deleteProductById(id);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("deleted", "Product Deleted Successfully");
+        return "redirect:/products";
     }
 
 
@@ -268,25 +287,5 @@ public class ProductController {
         if(image.exists()) {
             image.delete();
         }
-    }
-    @GetMapping("/data")
-    public String showProductsData(Model model) {
-        List<ProductFrequency> products = productRepository.findProductFrequency();
-        model.addAttribute("products", products);
-        model.addAttribute("name", "John");
-        Long[] id = new Long[3];
-        Long[] frequency = new Long[3];
-        String[] shoeNames = new String[3];
-        for (int i = 0; i < products.size(); i++) {
-            id[i] = products.get(i).getProduct_id();
-            String productName = productService.getProductById(id[i]).getProductName();
-            shoeNames[i] = productName;
-            frequency[i] = products.get(i).getFrequency();
-        }
-        model.addAttribute("id", id);
-        model.addAttribute("frequency", frequency);
-        model.addAttribute("shoes", shoeNames);
-        return "products_data";
-
     }
 }

@@ -12,7 +12,7 @@ import java.time.LocalDate;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "order_id")
-        public Long id;
+        public Long orderId;
 
 
         @Column(name = "user_id")
@@ -56,19 +56,19 @@ import java.time.LocalDate;
         }
 
         public Long getId() {
-            return id;
+            return orderId;
         }
 
         public void setId(Long id) {
-            this.id = id;
+            this.orderId = orderId;
         }
 
         public Long getOrderId() {
-            return id;
+            return orderId;
         }
 
-        public void setOrderId(int orderId) {
-            this.id = id;
+        public void setOrderId(Long orderId) {
+            this.orderId = orderId;
         }
 
         public String getUserId() {
