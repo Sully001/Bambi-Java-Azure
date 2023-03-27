@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -58,6 +59,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                    .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.jpg")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.png")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.webp")).permitAll()
                     .requestMatchers("/register").authenticated()
                     .requestMatchers("/products").authenticated()
                     .requestMatchers("/").authenticated()

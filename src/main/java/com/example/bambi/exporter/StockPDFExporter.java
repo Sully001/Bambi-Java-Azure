@@ -17,7 +17,8 @@ public class StockPDFExporter {
     private final List<Size> lowInStock;
     private final List<Size> outOfStock;
     Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-    Font heading = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20);
+    Font heading1 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, new Color(238, 145, 11));
+    Font heading2 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, new Color(0xFF, 0x00, 0x00));
 
     public StockPDFExporter(List<Size> lowInStock, List<Size> outOfStock) {
         this.lowInStock = lowInStock;
@@ -60,9 +61,9 @@ public class StockPDFExporter {
         Image image = Image.getInstance("src/main/resources/static/images/Bambi-Shoes-Logo-Text-only-1.png");
         document.add(image);
         document.add(new Paragraph("Date of Report: " + new Date(), font));
-
+        document.add(new Paragraph("Low In Stock: Any product with a stock level lower than 13"));
         //Create low stock table
-        document.add(new Paragraph("All Low In Stock Products", heading));
+        document.add(new Paragraph("All Low In Stock Products", heading1));
         PdfPTable lowInStockTable = new PdfPTable(4);
         lowInStockTable.setWidthPercentage(100);
         lowInStockTable.setSpacingBefore(15);
@@ -73,7 +74,7 @@ public class StockPDFExporter {
 
 
         //Add second table
-        document.add(new Paragraph("All Out Of Stock Products", heading));
+        document.add(new Paragraph("All Out Of Stock Products", heading2));
         PdfPTable outOfStockTable = new PdfPTable(4);
         outOfStockTable.setWidthPercentage(100);
         outOfStockTable.setSpacingBefore(15);

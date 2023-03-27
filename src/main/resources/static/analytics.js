@@ -154,7 +154,7 @@ new Chart(monthlyChart, {
         plugins: {
             title: {
                 display: true,
-                text: 'Description: Revenue of the past 30 days (Important for understanding trends)',
+                text: 'Description: Daily Revenue of the past 30 days (Important for understanding trends)',
                 font: {
                     weight: 'bold',
                 }
@@ -221,7 +221,7 @@ new Chart(averageDailySpend, {
         plugins: {
             title: {
                 display: true,
-                text: 'Description: Average Spend of a Customer in the Past 7 Days',
+                text: 'Description: Average Daily Spend of a Customer in the Past 7 Days',
                 font: {
                     weight: 'bold',
                 }
