@@ -3,6 +3,7 @@ package com.example.bambi.controller;
 import com.example.bambi.entity.Order;
 import com.example.bambi.entity.OrderDetails;
 import com.example.bambi.entity.Product;
+import com.example.bambi.repository.OrderRepository;
 import com.example.bambi.service.OrderDetailsService;
 import com.example.bambi.service.OrderService;
 import com.example.bambi.service.ProductService;
@@ -19,7 +20,9 @@ import java.util.List;
 @Controller
 public class OrderController {
 
+    @Autowired
     private final OrderService orderService;
+    @Autowired
     private final OrderDetailsService orderDetailsService;
     @Autowired
     private final ProductService productService;
@@ -31,8 +34,9 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String showOrders(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+    public String showOrders(Model model, @RequestParam(name = "keyword", required = false) String keyword) {
         List<Order> orders = orderService.getAllOrders();
+
         if (keyword != null && !keyword.isEmpty()) {
             orders = orderService.searchOrders(keyword);
         }
