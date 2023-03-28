@@ -1,23 +1,28 @@
 package com.example.bambi.service.impl;
 
 import com.example.bambi.entity.Product;
+import com.example.bambi.entity.Size;
 import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.ProductService;
+import com.example.bambi.service.SizeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final SizeService sizeService;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, SizeService sizeService) {
         super();
         this.productRepository = productRepository;
+        this.sizeService = sizeService;
     }
 
     @Override
@@ -60,5 +65,35 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() { return productRepository.findAll(); }
+
+    @Override
+    public List<Product> getLowStockProducts() {
+        List<Product> allProducts = getAllProducts();
+        List<Product> lowStockProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            List<com.example.bambi.entity.Size> sizes = sizeService.getSizesByProductId(product.getId());
+
+            boolean isLowStock = false;
+            boolean isOutOfStock = false;
+
+            for (Size size : sizes) {
+                if (size.getProductStock() == 0) {
+                    isOutOfStock = true;
+                    isLowStock = true;
+                } else if (size.getProductStock() <= 13) {
+                    isLowStock = true;
+                }
+            }
+
+            if (isOutOfStock || isLowStock) {
+                product.setSizes(sizes);
+                lowStockProducts.add(product);
+            }
+        }
+
+        return lowStockProducts;
+    }
+
 
 }

@@ -6,6 +6,7 @@
     <title>Update Product</title>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- jQuery and Bootstrap JS CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -21,7 +22,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Overview</a>
             </li>
-
             <li class="nav-item active">
                 <a class="nav-link" href="/products">Products</a>
             </li>
@@ -33,6 +33,12 @@
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button class="nav-link btn mr-3" th:data-toggle="'modal'" th:data-target="'#stockNotificationModal'"
+                        type="button">
+                    Stock Alert <i class="fa-solid fa-bell" th:style="${#lists.isEmpty(lowStockProducts)} ? '' : 'color: red;'"></i>
+                </button>
+            </li>
             <li class="nav-item">
                 <form  th:action="@{/logout}" method="post">
                     <button class="btn btn-primary" type="submit">Logout</button>
@@ -111,6 +117,34 @@
                             <button type="submit" class="btn btn-primary  border-0" id="submit"><p class="submit">Submit</p></button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Inventory System Modal-->
+            <div class="modal fade" th:id="'stockNotificationModal'" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Stock Notification</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>The following products have low stock or are out of stock</p>
+                            <p>Select a product to view stock:</p>
+                            <ul class="list-group">
+                                <li class="list-group-item" th:each="p : ${lowStockProducts}">
+                                    <a th:href="@{/product/stock/{id}(id=${p.id})}" th:text="${p.productName}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
