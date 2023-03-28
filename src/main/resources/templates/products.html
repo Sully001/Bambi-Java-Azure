@@ -74,7 +74,7 @@
         <button  type="submit" class="btn btn-secondary">Search</button>
       </form>
       <div class="mb-3 ml-auto">
-        <a th:href="@{/products/new}" class="btn btn-secondary">Add Product</a>
+        <a th:href="@{/products/new}" class="btn btn-primary">Add Product</a>
       </div>
     </div>
   </div>
@@ -87,31 +87,31 @@
             <th>
                Brand
               <a th:href="@{'/products/' + ${currentPage} + '?sortField=productBrand&sortDir=' + ${reverseSortDir}}">
-                &#8691
+                <i class="fa-solid fa-sort"></i>
               </a>
             </th>
             <th>
                Name
               <a th:href="@{'/products/' + ${currentPage} + '?sortField=productName&sortDir=' + ${reverseSortDir}}">
-                &#8691
+                <i class="fa-solid fa-sort"></i>
               </a>
             </th>
             <th>
                Price
               <a th:href="@{'/products/' + ${currentPage} + '?sortField=productPrice&sortDir=' + ${reverseSortDir}}">
-                &#8691
+                <i class="fa-solid fa-sort"></i>
               </a>
             </th>
             <th>
                Gender
               <a th:href="@{'/products/' + ${currentPage} + '?sortField=productGender&sortDir=' + ${reverseSortDir}}">
-                &#8691
+                <i class="fa-solid fa-sort"></i>
               </a>
             </th>
             <th>
                Category
               <a th:href="@{'/products/' + ${currentPage} + '?sortField=productCategory&sortDir=' + ${reverseSortDir}}">
-                &#8691
+                <i class="fa-solid fa-sort"></i>
               </a>
             </th>
             <th> Image</th>
@@ -129,7 +129,7 @@
             <td th:text="${product.productCategory}"></td>
             <td><img th:src="${product.logoImagePath}" width="80px" height="80px"/></td>
             <td>
-              <p><a th:href="@{/product/stock/{id}(id=${product.id})}" class="btn stock-btn th:class append=">Stock levels <span style='font-size:16px;'>&#8680;</span></a></p>
+              <p><button th:href="@{/product/stock/{id}(id=${product.id})}" class="btn btn-outline-info th:class append=">Stock <i class="fa-solid fa-magnifying-glass-chart"></i></button></p>
             </td>
             <td>
               <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-block btn-secondary">
