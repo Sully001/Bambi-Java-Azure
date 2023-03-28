@@ -188,14 +188,6 @@
   </div>
 </footer>
 <!--Inventory System Modal-->
-      <div class="col-lg-4">
-        <div class="d-flex align-items-center mb-3">
-          <button class="nav-link btn mr-3" th:data-toggle="'modal'" th:data-target="'#stockNotificationModal'"
-                  type="button">
-            Stock Alert <i class="fa-solid fa-bell" th:style="${#lists.isEmpty(lowStockProducts)} ? '' : 'color: red;'"></i>
-          </button>
-        </div>
-      </div>
       <div class="modal fade" th:id="'stockNotificationModal'" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
