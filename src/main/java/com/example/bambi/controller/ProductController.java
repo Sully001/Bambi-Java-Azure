@@ -1,6 +1,5 @@
 package com.example.bambi.controller;
 
-import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Product;
 import com.example.bambi.entity.Size;
 import com.example.bambi.repository.ProductRepository;

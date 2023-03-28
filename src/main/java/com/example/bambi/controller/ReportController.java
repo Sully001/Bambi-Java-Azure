@@ -2,6 +2,7 @@ package com.example.bambi.controller;
 
 import com.example.bambi.Projection.ProductFrequency;
 import com.example.bambi.entity.Order;
+import com.example.bambi.entity.Product;
 import com.example.bambi.entity.Size;
 import com.example.bambi.exporter.OrderPDFExporter;
 import com.example.bambi.exporter.StockPDFExporter;
@@ -41,6 +42,9 @@ public class ReportController {
     }
     @GetMapping("/reports")
     public String showProductsData(Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
 
         //Get Top 3 Most Sold Items & Their Quantities Sold
         List<ProductFrequency> products = productRepository.findProductFrequency();
