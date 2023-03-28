@@ -63,7 +63,7 @@ public class ProductController {
             keyword = "";
         }
 
-        int pageSize = 10;
+        int pageSize = 5;
         Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
 
         // Get a list of low stock products
