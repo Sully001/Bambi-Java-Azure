@@ -67,9 +67,35 @@
       </form>
         </div>
         <div class="col-lg-4">
-      <div th:if="${message != null}" class="alert alert-danger" role="alert">
-        <p th:text="${message}"></p>
-      </div>
+          <div class="alert alert-danger" role="alert">
+            <div th:each="p : ${lowStockProducts}">
+              <button type="button" class="btn btn-link" data-toggle="modal" th:data-target="'#productModal' + ${p.id}">
+                Stock Notification
+              </button>
+              <div class="modal fade" th:id="'productModal' + ${p.id}" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Stock Notification</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p th:text="'Product Name: ' + ${p.productName}"></p>
+                      <a th:href="@{/product/stock/{id}(id=${p.id})}" >Go to Stock</a>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         </div>
         <div class="col-lg-4">
       <div class="mb-3 ml-auto">
@@ -141,50 +167,31 @@
         </table>
       </div>
 
-      <div th:if = "${totalPages > 1}">
-        <div class="row col-sm-10 justify-content-between d-flex">
-          <div>
-            <a th:if="${currentPage > 1 }" th:href="@{'/products/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword=' + ${keyword }}">Previous</a>
-            <span th:unless="${currentPage > 1 }">Previous</span>
-          </div>
-          <div class="col-sm-2">
-            Total Rows: [[${totalItems}]]
-          </div>
-          <div>
-            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-              <a th:if="${currentPage != i}" th:href="@{'/products/'+ ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + '&keyword=' + ${keyword}}">[[${i}]]</a>
-              <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-            </span>
-          </div>
-          <div>
-            <a th:if="${currentPage < totalPages}" th:href="@{'/products/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}+ '&keyword=' + ${keyword}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>
-          </div>
-
-        </div>
-      </div>
+    <div th:if="${totalPages > 1}">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" th:if="${currentPage > 1}" th:href="@{${'/products/' + (currentPage - 1)}(sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">
+            Previous
+          </a>
+          <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == page ? 'active' : ''}" th:each="page: ${#numbers.sequence(1, totalPages)}">
+          <a class="page-link" th:if="${currentPage != page}" th:href="@{${'/products/' + page}(sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">
+            [[${page}]]
+          </a>
+          <span class="page-link" th:unless="${currentPage != page}">[[${page}]]</span>
+        </li>
+        <li class="page-item">
+          <a class="page-link" th:if="${currentPage < totalPages}" th:href="@{${'/products/' + (currentPage + 1)}(sortField=${sortField}, sortDir=${sortDir}, keyword=${keyword})}">
+            Next
+          </a>
+          <span class="page-link" th:unless="${currentPage < totalPages}">Next</span>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
 
-<!-- Inventory Alert Modal -->
-<div class="modal fade" id="inventory-alert-modal" tabindex="-1" role="dialog" aria-labelledby="inventory-alert-modal-label" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="inventory-alert-modal-label">Inventory Alert</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- message goes here -->
-      </div>
-      <div class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
 <footer class="bg-light ">
   <div class="container">
     <div class="row">
