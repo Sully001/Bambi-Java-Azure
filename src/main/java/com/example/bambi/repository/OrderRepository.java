@@ -16,9 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT * FROM orders WHERE created_at BETWEEN :startOfTime AND :endOfTime", nativeQuery = true)
     List<Order> getPreviousOrdersByTimestamp(@Param("startOfTime") Timestamp startOfTime, @Param("endOfTime") Timestamp endOfTime);
 
-    @Query("SELECT orders FROM Order orders WHERE CAST(orders.orderId as string) LIKE %?1% " +
-            "or orders.userId LIKE %?1% or CAST(orders.orderTotal as string) LIKE %?1% or " +
-            "orders.orderCompletion LIKE %?1% or orders.firstName LIKE %?1%  or orders.lastName LIKE %?1%")
+    @Query("SELECT orders FROM Order orders WHERE CAST(orders.orderId as string) LIKE %:keyword% " +
+            "or orders.userId LIKE %:keyword% or CAST(orders.orderTotal as string) LIKE %:keyword% or " +
+            "orders.orderCompletion LIKE %:keyword% or orders.firstName LIKE %:keyword%  or orders.lastName LIKE %:keyword%")
     List<Order> findBySearch(@Param("keyword") String keyword);
-
 }
