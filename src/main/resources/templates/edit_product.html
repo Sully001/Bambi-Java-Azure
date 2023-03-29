@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Update Product</title>
+    <title>Update Product | Bambi Management System</title>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -28,6 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/orders}">Orders</a>
             </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="/customer">Customers</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/reports}">Reports & Analytics</a>
             </li>
@@ -39,6 +43,7 @@
                     Stock Alert <i class="fa-solid fa-bell" th:style="${#lists.isEmpty(lowStockProducts)} ? '' : 'color: red;'"></i>
                 </button>
             </li>
+
             <li class="nav-item">
                 <form  th:action="@{/logout}" method="post">
                     <button class="btn btn-primary" type="submit">Logout</button>
