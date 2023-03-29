@@ -4,6 +4,7 @@ import com.example.bambi.entity.Order;
 import com.example.bambi.entity.OrderDetails;
 import com.example.bambi.repository.OrderRepository;
 import com.example.bambi.service.OrderService;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,5 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> searchOrders(String search) {
         return orderRepository.findBySearch(search);
     }
-
 
 }
