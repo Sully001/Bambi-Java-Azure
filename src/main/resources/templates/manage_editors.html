@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Manage Editors | Bambi Management System</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{/}">Bambi Admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link " href="/">Overview</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="/products">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/orders}">Orders</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="/customer">Customers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/reports}">Reports & Analytics</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <button class="nav-link btn mr-3" th:data-toggle="'modal'" th:data-target="'#stockNotificationModal'"
+                type="button">
+          Stock Alert <i class="fa-solid fa-bell" th:style="${#lists.isEmpty(lowStockProducts)} ? '' : 'color: red;'"></i>
+        </button>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:if="${isAdmin}" href="/manage_editors">Manage Editors</a>
+      <li class="nav-item">
+      <li class="nav-item">
+        <form  th:action="@{/logout}" method="post">
+          <button class="btn btn-primary" type="submit">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Manage Team </h1>
+  <div class="row">
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Manage Editors
+        </div>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="editor : ${editors}">
+            <td th:text="${editor.id}"></td>
+            <td th:text="${editor.username}"></td>
+            <td>
+              <form th:action="@{/delete_editor}" method="post" style="display: inline;">
+                <input type="hidden" name="id" th:value="${editor.id}">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          Actions
+        </div>
+        <div class="card-body">
+            <a href="/register" class="btn btn-block btn-primary mt-1">Add a New Editor</a>
+          <!-- Success message -->
+          <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <p th:text="${successMessage}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="bg-light fixed-bottom">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>&copy; 2023 Bambi Admin. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--Inventory System Modal-->
+<div class="modal fade" th:id="'stockNotificationModal'" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Stock Notification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>The following products have low stock or are out of stock</p>
+        <p>Select a product to view stock:</p>
+        <ul class="list-group">
+          <li class="list-group-item" th:each="p : ${lowStockProducts}">
+            <a th:href="@{/product/stock/{id}(id=${p.id})}" th:text="${p.productName}"></a>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import com.example.bambi.service.SizeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +44,7 @@ public class ProductController {
 
     //GET request if no search all listed products shown, if search then only matched products shown
     @GetMapping("/products")
-    public String listAllProducts(String keyword, Model model) {
+    public String listAllProducts(String keyword, Model model, Authentication authentication) {
         // Default: the home page will be sorted by product name asc.
 
         return findPaginated(keyword,1, "productName", "asc", model);
