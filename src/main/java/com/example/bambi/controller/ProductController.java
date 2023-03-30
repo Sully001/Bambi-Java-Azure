@@ -46,7 +46,7 @@ public class ProductController {
     public String listAllProducts(String keyword, Model model) {
         // Default: the home page will be sorted by product name asc.
 
-        return findPaginated(keyword,1, "productName", "asc", model);
+        return findPaginated(keyword,1,5, "productName", "asc", model);
     }
 
     //Handles pagination
@@ -54,6 +54,7 @@ public class ProductController {
     public String findPaginated(
             @RequestParam(name = "keyword") String keyword,
             @PathVariable(value = "pageNo") int pageNo,
+            Integer pageSize,
             @RequestParam("sortField") String sortField,
             @RequestParam(value = "sortDir") String sortDir,
             Model model) {
@@ -64,7 +65,7 @@ public class ProductController {
                 keyword = "";
             }
 
-            int pageSize = 5;
+            pageSize = 5;
             Page<Product> page = productService.findPaginated(keyword, pageNo, pageSize, sortField, sortDir);
 
             // Get a list of low stock products
@@ -77,6 +78,7 @@ public class ProductController {
             model.addAttribute("totalPages", page.getTotalPages());
             model.addAttribute("totalItems", page.getTotalElements());
             model.addAttribute("sortField", sortField);
+            model.addAttribute("pageSize", pageSize);
             model.addAttribute("sortDir", sortDir);
             model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
             model.addAttribute("listProducts", listProducts);

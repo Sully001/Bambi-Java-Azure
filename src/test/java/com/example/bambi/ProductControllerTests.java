@@ -3,7 +3,6 @@ package com.example.bambi;
 import com.example.bambi.controller.ProductController;
 import com.example.bambi.entity.Product;
 import com.example.bambi.entity.Size;
-import com.example.bambi.repository.ProductRepository;
 import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
 import org.junit.jupiter.api.Test;
@@ -32,8 +31,6 @@ public class ProductControllerTests {
 
 
     ProductService productService = mock(ProductService.class);
-
-    ProductRepository productRepository = mock(ProductRepository.class);
 
     SizeService sizeService = mock(SizeService.class);
 
@@ -145,13 +142,13 @@ public class ProductControllerTests {
     @Test
     public void testFindPaginated() {
         // Arrange
-        String keyword = "test"; int pageNo = 1; String sortField = "productName"; String sortDir = "asc";
+        String keyword = "test"; int pageNo = 1; int pageSize = 5;String sortField = "productName"; String sortDir = "asc";
 
         Page<Product> page = new PageImpl<>(Arrays.asList(new Product(), new Product()));
         Mockito.when(productService.findPaginated(keyword, pageNo, 5, sortField, sortDir)).thenReturn(page);
 
         // Act
-        String viewName = controller.findPaginated(keyword, pageNo, sortField, sortDir, model);
+        String viewName = controller.findPaginated(keyword, pageNo, pageSize, sortField, sortDir, model);
         // Assert
         assertEquals("products", viewName);
         Mockito.verify(model).addAttribute("currentPage", pageNo);
@@ -168,17 +165,17 @@ public class ProductControllerTests {
     @Test
     void testKeywordNeverNull() {
         // Arrange
-        int pageNo = 1; String sortField = "productName"; String sortDir = "asc"; String keyword = "";
+        int pageNo = 1; int pageSize = 5; String sortField = "productName"; String sortDir = "asc"; String keyword = "";
 
         Page<Product> page = new PageImpl<>(Arrays.asList(new Product(), new Product()));
         Mockito.when(productService.findPaginated(keyword, pageNo, 5, sortField, sortDir)).thenReturn(page);
         // Act
-        String result = controller.findPaginated("", pageNo, sortField, sortDir, model);
+        String result = controller.findPaginated("", pageNo,pageSize, sortField, sortDir, model);
 
         // Assert
         assertNotNull(result);
-        assertNotNull(controller.findPaginated(null, pageNo, sortField, sortDir, model));
-        assertNotNull(controller.findPaginated("", pageNo, sortField, sortDir, model));
+        assertNotNull(controller.findPaginated(null, pageNo,pageSize, sortField, sortDir, model));
+        assertNotNull(controller.findPaginated("", pageNo,pageSize, sortField, sortDir, model));
     }
 
 }
