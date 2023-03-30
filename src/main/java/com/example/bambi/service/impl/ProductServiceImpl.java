@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
                 if (size.getProductStock() == 0) {
                     isOutOfStock = true;
                     isLowStock = true;
-                } else if (size.getProductStock() <= 13) {
+                } else if (size.getProductStock() <= 10) {
                     isLowStock = true;
                 }
             }

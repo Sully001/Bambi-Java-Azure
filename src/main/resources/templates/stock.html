@@ -89,7 +89,7 @@
 
                         <tr th:each="size : ${sizes}">
                             <td th:text="${size.productSize}"></td>
-                            <td th:class="${size.productStock == 0 ? 'out-of-stock' : (size.productStock < 10 ? 'low-stock' : (size.productStock >= 10 ? 'in-stock' : ''))}">
+                            <td th:class="${size.productStock == 0 ? 'out-of-stock' : (size.productStock <= 10 ? 'low-stock' : (size.productStock > 10 ? 'in-stock' : ''))}">
                                 <span th:text="${size.productStock}"></span>
                             </td>
                             <td>
