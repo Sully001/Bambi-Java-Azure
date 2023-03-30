@@ -41,7 +41,7 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Overview</a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="/products">Products</a>
       </li>
       <li class="nav-item">
@@ -114,12 +114,13 @@
                   <label>Product Category:</label>
                   <select name="product_category" id="product_category" th:field="*{productCategory}" class="form-control">
                     <option value="Trainers">Trainers</option>
-                    <option value="Loafers">Loafers</option>
                     <option value="Boots">Boots</option>
                     <option value="Heels">Heels</option>
+                    <option value="Heels">Flats</option>
+                    <option value="Heeled Sandals">Sandals</option>
+                    <option value="Loafers">Loafers</option>
                     <option value="Dress Shoes">Dress Shoes</option>
-                    <option value="Heeled Sandals">Heeled Sandals</option>
-                    <option value="Brogues">Brogues</option>
+                    <option value="Brogues">Sliders</option>
                   </select>
                   <p class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></p>
                 </div>
@@ -218,12 +219,6 @@
                   </div>
                 </div>
               </div>
-
-
-
-
-
-
             </div>
             <div class="btn-box">
               <button type="button" id="back1" class="btn btn-secondary">Back</button>
@@ -242,12 +237,14 @@
     // Initialize form navigation
     $("#form2").hide();
     $("#next1").click(function() {
+      $("#next1").hide()
       $("#form1").hide();
       $("#form2").show();
       $("#submit").show();
-      $("#progress").width("50%");
+      $("#progress").width("100%");
     });
     $("#back1").click(function() {
+      $("#next1").show()
       $("#form2").hide();
       $("#form1").show();
       $("#submit").hide();

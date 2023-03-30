@@ -11,7 +11,7 @@ import java.util.List;
 public interface SizeRepository extends JpaRepository<Size, Long> {
     List<Size> findByProductId(Long productId);
 
-    @Query(value = "SELECT * FROM sizes WHERE product_stock > 0 AND product_stock <= 13", nativeQuery = true)
+    @Query(value = "SELECT * FROM sizes WHERE product_stock > 0 AND product_stock <= 10", nativeQuery = true)
     List<Size> getSizesLowInStock();
 
     @Query(value = "SELECT * FROM sizes WHERE product_stock = 0", nativeQuery = true)

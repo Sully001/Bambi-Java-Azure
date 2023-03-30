@@ -15,11 +15,10 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
     //Query matching name, brand, price, gender and category against SQL db
-   @Query("SELECT products FROM Product products WHERE products.productName LIKE %?1% " +
-           "or products.productBrand LIKE %?1% or CAST(products.productPrice as string) LIKE %?1% or " +
-          "products.productGender LIKE %?1% or products.productCategory LIKE %?1%")
-   Page<Product> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
+    @Query("SELECT products FROM Product products WHERE products.productName LIKE %:keyword% " +
+            "or products.productBrand LIKE %:keyword% or CAST(products.productPrice as string) LIKE %:keyword% or " +
+            "products.productGender LIKE %:keyword% or products.productCategory LIKE %:keyword%")
+    Page<Product> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
     @Query(value = "select product_id, COUNT(product_id) " +
             "AS FREQUENCY from order_details GROUP BY product_id " +
             "ORDER BY COUNT(product_id) DESC LIMIT 3;", nativeQuery = true)

@@ -23,7 +23,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Overview</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/products">Products</a>
             </li>
             <li class="nav-item">
@@ -91,14 +91,14 @@
                         <div class="form-group">
                             <label for="category">Product Category</label>
                             <select name="product_category" id="category" class="form-control" th:field="*{productCategory}">
-                                <option value="" selected disabled>Select a Category</option>
                                 <option value="Trainers">Trainers</option>
-                                <option value="Loafers">Loafers</option>
                                 <option value="Boots">Boots</option>
                                 <option value="Heels">Heels</option>
+                                <option value="Heels">Flats</option>
+                                <option value="Heeled Sandals">Sandals</option>
+                                <option value="Loafers">Loafers</option>
                                 <option value="Dress Shoes">Dress Shoes</option>
-                                <option value="Heeled Sandals">Heeled Sandals</option>
-                                <option value="Brogues">Brogues</option>
+                                <option value="Brogues">Sliders</option>
                             </select>
                             <p class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></p>
                         </div>
