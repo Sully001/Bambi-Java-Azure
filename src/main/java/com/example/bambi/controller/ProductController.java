@@ -44,7 +44,7 @@ public class ProductController {
 
     //GET request if no search all listed products shown, if search then only matched products shown
     @GetMapping("/products")
-    public String listAllProducts(String keyword, Model model, Authentication authentication) {
+    public String listAllProducts(String keyword, Model model) {
         // Default: the home page will be sorted by product name asc.
 
         return findPaginated(keyword,1,5, "productName", "asc", model);
