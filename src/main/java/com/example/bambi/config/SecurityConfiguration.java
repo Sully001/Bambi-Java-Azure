@@ -50,11 +50,6 @@ public class SecurityConfiguration {
         };
     }
 
-    @ModelAttribute("isAdmin")
-    public boolean isAdmin(Authentication authentication) {
-        return authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_MAIN_ADMIN"));
-    }
 
 
 

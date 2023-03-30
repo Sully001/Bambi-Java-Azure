@@ -51,7 +51,9 @@
           Stock Alert <i class="fa-solid fa-bell" th:style="${#lists.isEmpty(lowStockProducts)} ? '' : 'color: red;'"></i>
         </button>
       </li>
-
+      <li class="nav-item">
+        <a class="nav-link" th:if="${isAdmin}" href="/manage_editors">Manage Editors</a>
+      <li class="nav-item">
       <li class="nav-item">
         <form  th:action="@{/logout}" method="post">
           <button class="btn btn-primary" type="submit">Logout</button>
@@ -60,6 +62,7 @@
     </ul>
   </div>
 </nav>
+
 <div class="container mt-4">
   <h1 class="text-center mb-4">Product Inventory</h1>
   <div th:if="${add}" class="alert alert-success d-inline-flex align-items-center mb-3" role="alert">

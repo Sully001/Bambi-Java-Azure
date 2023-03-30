@@ -43,7 +43,7 @@ public class ReportController {
     }
 
     @GetMapping("/")
-    public String showProductsData(Model model, Authentication authentication) {
+    public String showProductsData(Model model) {
         // Get a list of low stock products
         List<Product> lowStockProducts = productService.getLowStockProducts();
         model.addAttribute("lowStockProducts", lowStockProducts);
@@ -134,8 +134,7 @@ public class ReportController {
             today = today.minusDays(1);
             sum = 0;
         }
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_MAIN_ADMIN"));
+
         model.addAttribute("frequency", frequency);
         model.addAttribute("shoes", shoeNames);
         model.addAttribute("dates", dates);
@@ -144,7 +143,6 @@ public class ReportController {
         model.addAttribute("monthlyRevenue", monthlyRevenue);
         model.addAttribute("month", month);
 
-        model.addAttribute("isAdmin", isAdmin);
 
 
         return "home";
