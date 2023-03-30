@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,12 +42,18 @@ public class SecurityConfiguration {
             Optional<Admin> adminOptional = adminRepository.findByUsername(username);
             if (adminOptional.isPresent()) {
                 Admin admin = adminOptional.get();
-                return new User(admin.getUsername(), admin.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+                String roleName = "ROLE_" + admin.getRole().toString();
+                return new User(admin.getUsername(), admin.getPassword(), List.of(new SimpleGrantedAuthority(roleName)));
             } else {
                 throw new UsernameNotFoundException("Admin not found");
             }
         };
     }
+
+
+
+
+
     public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
         @Override
@@ -62,7 +69,7 @@ public class SecurityConfiguration {
                     .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.jpg")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.png")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/bambi-photos/**/*.webp")).permitAll()
-                    .requestMatchers("/register").authenticated()
+                    .requestMatchers("/manage_editors").hasAuthority("ROLE_MAIN_ADMIN")
                     .requestMatchers("/products").authenticated()
                     .requestMatchers("/").authenticated()
                     .anyRequest().authenticated()

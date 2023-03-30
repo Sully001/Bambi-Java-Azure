@@ -12,6 +12,7 @@ import com.example.bambi.service.ProductService;
 import com.example.bambi.service.SizeService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,8 @@ public class ReportController {
         this.productService = productService;
         this.sizeService = sizeService;
     }
-    @GetMapping("/reports")
+
+    @GetMapping("/")
     public String showProductsData(Model model) {
         // Get a list of low stock products
         List<Product> lowStockProducts = productService.getLowStockProducts();
@@ -140,7 +142,10 @@ public class ReportController {
         model.addAttribute("avgDailySpend", avgDailySpend);
         model.addAttribute("monthlyRevenue", monthlyRevenue);
         model.addAttribute("month", month);
-        return "reports";
+
+
+
+        return "home";
     }
 
     @GetMapping("/orders/export/prev-week")
@@ -200,6 +205,11 @@ public class ReportController {
         String headerValue = "attachment; filename=orders_prev_month" + currentDateTime + ".pdf";
         OrderPDFExporter exporter = new OrderPDFExporter(listOrders, prevMonthStart, "Month");
         exporter.export(response);
+    }
+
+    @GetMapping("/reports")
+    public String showReport() {
+        return "reports";
     }
 
     @GetMapping("/orders/export/total-year-orders")
