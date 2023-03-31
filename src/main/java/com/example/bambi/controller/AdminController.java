@@ -38,6 +38,10 @@ public class AdminController {
     @Autowired
     private ProductService productService;
 
+    public AdminController(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         // Get a list of low stock products
