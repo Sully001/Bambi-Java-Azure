@@ -68,7 +68,7 @@ public class ProductControllerTests {
 
         MockMultipartFile productImage = new MockMultipartFile("product name", "image.jpg", "image/jpeg", "Some Image".getBytes());
         Product product = new Product();
-
+        product.setId(id);
         product.setProductBrand(productBrand); product.setProductName(productName);
         product.setProductPrice(productPrice); product.setProductGender(productGender);
         product.setProductCategory(productCategory); product.setProductDescription(productDescription);
