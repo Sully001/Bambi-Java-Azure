@@ -96,6 +96,9 @@ public class ProductController {
         //GET request to retrieve the Add Product Form
     @GetMapping("/products/new")
     public String addProductForm(Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         model.addAttribute("product", new Product());
         return "add_product";
     }
@@ -143,6 +146,9 @@ public class ProductController {
     //GETs the existing product and produces the data in relevant form fields
     @GetMapping("/product/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         model.addAttribute("product", productService.getProductById(id));
         return "edit_product";
     }

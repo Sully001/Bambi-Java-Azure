@@ -40,12 +40,18 @@ public class AdminController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         model.addAttribute("admin", new Admin());
         return "register";
     }
 
     @PostMapping("/register")
     public String registerAdmin(@Valid @ModelAttribute Admin admin, BindingResult bindingResult, Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         if (bindingResult.hasErrors()) {
             List<String> errorMessages = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
@@ -87,6 +93,9 @@ public class AdminController {
         List<Admin> editors = ((List<Admin>) adminRepository.findAll()).stream()
                 .filter(admin -> admin.getRole() == Role.EDITOR)
                 .collect(Collectors.toList());
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         model.addAttribute("editors", editors);
         return "manage_editors";
     }
