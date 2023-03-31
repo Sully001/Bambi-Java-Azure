@@ -208,7 +208,10 @@ public class ReportController {
     }
 
     @GetMapping("/reports")
-    public String showReport() {
+    public String showReport(Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         return "reports";
     }
 

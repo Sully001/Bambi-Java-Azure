@@ -1,12 +1,11 @@
 package com.example.bambi.controller;
 
 
-import com.example.bambi.entity.Admin;
-import com.example.bambi.entity.Order;
-import com.example.bambi.entity.Users;
+import com.example.bambi.entity.*;
 import com.example.bambi.repository.AdminRepository;
 import com.example.bambi.repository.OrderRepository;
 import com.example.bambi.repository.UsersRepository;
+import com.example.bambi.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.example.bambi.entity.Role;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +34,9 @@ public class AdminController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -72,6 +73,9 @@ public class AdminController {
 
     @GetMapping("/customer")
     public String getAllUsers(Model model) {
+        // Get a list of low stock products
+        List<Product> lowStockProducts = productService.getLowStockProducts();
+        model.addAttribute("lowStockProducts", lowStockProducts);
         List<Users> users = usersRepository.findAll();
         System.out.println("Retrieved " + users.size() + " orders from the database");
         model.addAttribute("users", users);
