@@ -1,7 +1,7 @@
 <div style="background-color: white;">
   <img src="FIND SOURCE" style="background-color: white;">
 </div>
-<h1 align="center">Hi 👋, we're Bambi</h1>
+<h1 align="center">Hi 👋, we're Bambi Admin</h1>
 <h3 align="center">Bambi Inventory Management System</h3>
 
 <h1>Description</h1>
