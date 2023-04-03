@@ -1,5 +1,5 @@
 <div style="background-color: white;">
-  <img src="FIND SOURCE" style="background-color: white;">
+  <img src="bambi-photos/Bambi_Shoes_Logo_no_bg.png" style="background-color: white;">
 </div>
 <h1 align="center">Hi 👋, we're Bambi Admin</h1>
 <h3 align="center">Bambi Inventory Management System</h3>
