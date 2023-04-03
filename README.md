@@ -6,7 +6,7 @@
 <h3 align="center">Bambi Inventory Management System</h3>
 
 <h1>Description</h1>
-Bambi Admin is a functional, profesional inventory managemnt system designed to make running a business easy!
+Bambi Admin is a functional, professional inventory managemnt system designed to make running a business easy!
 The backend of this site was built with Java (Spring Boot). The front end of the site was built using HTML, CSS, Bootstrap and Javascript. Our database uses MySQL and it is hosted on Azure.
 
 -------------------------------------------------------------------------------------------------
